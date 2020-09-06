@@ -22,6 +22,7 @@ class login(models.Model):
     def __str__(self):
         return self.login_id
 
+
 class feedback(models.Model):
     feed_id = models.CharField(max_length=10, primary_key=True, unique=True)
     user_id = models.ForeignKey(user, on_delete=models.CASCADE)
@@ -33,11 +34,14 @@ class feedback(models.Model):
     def __str__(self):
         return self.feed_id
 
+
 class admin(models.Model):
-    admin_id = models.ForeignKey(user, primary_key=True, on_delete=models.CASCADE)
-    
+    admin_id = models.ForeignKey(
+        user, primary_key=True, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.admin_id
+
 
 class package(models.Model):
     pack_id = models.CharField(max_length=10, primary_key=True, unique=True)
@@ -49,13 +53,16 @@ class package(models.Model):
     def __str__(self):
         return self.pack_id
 
+
 class customer(models.Model):
-    cus_id = models.ForeignKey(user, on_delete=models.CASCADE, primary_key=True)
+    cus_id = models.ForeignKey(
+        user, on_delete=models.CASCADE, primary_key=True)
     district = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
 
     def __str__(self):
         return self.cus_id
+
 
 class event(models.Model):
     event_id = models.CharField(max_length=10, primary_key=True, unique=True)
@@ -78,6 +85,7 @@ class event(models.Model):
     def __str__(self):
         return self.event_id
 
+
 class ticket(models.Model):
     ticket_id = models.CharField(primary_key=True, unique=True, max_length=10)
     event_id = models.ForeignKey(event, on_delete=models.CASCADE)
@@ -93,6 +101,7 @@ class ticket(models.Model):
     def __str__(self):
         return self.ticket_id
 
+
 class batch(models.Model):
     batch_id = models.CharField(primary_key=True, unique=True, max_length=10)
     ticket_id = models.ForeignKey(ticket, on_delete=models.CASCADE)
@@ -101,8 +110,10 @@ class batch(models.Model):
     def __str__(self):
         return self.batch_id
 
+
 class batch_ticket(models.Model):
-    batch_ticket_id = models.CharField(max_length=10,primary_key=True,unique=True)
+    batch_ticket_id = models.CharField(
+        max_length=10, primary_key=True, unique=True)
     batch_id = models.ForeignKey(batch, on_delete=models.CASCADE)
     cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
     availability_status = models.CharField(max_length=20)
@@ -110,8 +121,10 @@ class batch_ticket(models.Model):
     def __str__(self):
         return self.batch_ticket_id
 
+
 class reservation(models.Model):
-    reservation_id = models.CharField(max_length=10, primary_key=True, unique=True)
+    reservation_id = models.CharField(
+        max_length=10, primary_key=True, unique=True)
     batch_ticket_id = models.ForeignKey(batch_ticket, on_delete=models.CASCADE)
     event_id = models.ForeignKey(event, on_delete=models.CASCADE)
     cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
@@ -120,6 +133,7 @@ class reservation(models.Model):
 
     def __str__(self):
         return self.reservation_id
+
 
 class payment(models.Model):
     pay_id = models.CharField(max_length=10, primary_key=True)
@@ -131,6 +145,7 @@ class payment(models.Model):
 
     def __str__(self):
         return self.pay_id
+
 
 class advertistment(models.Model):
     ad_id = models.CharField(max_length=10, primary_key=True, unique=True)
@@ -149,5 +164,171 @@ class advertistment(models.Model):
         return self.ad_id
 
 
+class invoice(models.Model):
+    invoice_id = models.CharField(max_length=10, primary_key=True)
+    pay_id = models.ForeignKey(payment, on_delete=models.CASCADE)
+    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
+    order_name = models.CharField(max_length=50)
+    amount = models.FloatField(default=0.00)
+    inv_status = models.CharField(max_length=50)
+    payment_type = models.CharField(max_length=20)
+    date = models.DateField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return self.invoice_id
+
+
+class equipment(models.Model):
+    eq_id = models.CharField(max_length=10, primary_key=True)
+    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    price = models.FloatField(default=0.00, max_length=5)
+    qty = models.IntegerField(max_length=5)
+
+    def __str__(self):
+        return self.eq_id
+
+
+class equipment_event(models.Model):
+    eq_ev_id = models.CharField(max_length=10, primary_key=True)
+    event_id = models.ForeignKey(event, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    qty = models.IntegerField(max_length=5)
+
+    def __str__(self):
+        return self.eq_ev_id
+
+class rented_item(models.Model):
+    rented_item_id = models.ForeignKey(equipment,on_delete=models.CASCADE, max_length=10, primary_key=True)
+    supplier = models.CharField(max_length=50)
+    rented_date = models.DateField(auto_now=True, auto_now_add=False)
+    rental_period = models.CharField(max_length=10)
     
+
+    def __str__(self):
+        return self.rented_item_id
+
+
+class rent_details(models.Model):
+    rent_id = models.CharField(max_length=10, primary_key=True)
+    pay_id = models.ForeignKey(payment, on_delete=models.CASCADE)
+    eq_id = models.ForeignKey(equipment, on_delete=models.CASCADE)
+    rental_date = models.DateField(auto_now=True)
+    rental_period = models.CharField(max_length=10)
+    status = models.CharField(max_length=10)
+    price = models.FloatField(default=0.00)
+    qty = models.IntegerField()
+
+    def __str__(self):
+        return self.rent_id
+
+class customer_equipment(models.Model):
+    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE,primary_key=True)
+    equipment_id = models.ForeignKey(equipment, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return self.cus_id
+
+class inventory_items(models.Model):
+    item_id = models.ForeignKey(equipment_event, on_delete=models.CASCADE, primary_key=True)
+    image = models.CharField(max_length=500)
+    model = models.CharField(max_length=20)
+    condition = models.CharField(max_length=50)
+    availability = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.item_id
+
+class emp_details(models.Model):
+    emp_det_id = models.CharField(max_length=10, primary_key=True)
+    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
+    employee_name = models.CharField(max_length=50)
+    primary_phone = models.CharField(max_length=10)
+    secondary_phone = models.CharField(max_length=10)
+    position = models.CharField(max_length=30)
+    trained = models.CharField(max_length=10)
+    joined_date = models.DateField(auto_now=True)
+    permenent = models.CharField(max_length=10)
+    qualification = models.CharField(max_length=500)
+    gender = models.CharField(max_length=10)
+    email = models.CharField(max_length=50)
+    dob = models.DateField(auto_now=False, auto_now_add=False, null=False)
+    address = models.CharField(max_length=500)
+    trained_year = models.IntegerField(max_length=5)
+
+    def __str__(self):
+        return self.emp_det_id
+
+class leave(models.Model):
+    leave_id = models.CharField(max_length=10, primary_key=True)
+    reason = models.CharField(max_length=50)
+    leave_type = models.CharField(max_length=50)
+    month = models.CharField(max_length=10)
+    year = models.CharField(max_length=10)
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    paid = models.CharField(max_length=10)
+    total_payment = models.FloatField(default=0.00)
+    employee_name = models.CharField(max_length=20)
+    department_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.leave_id
+
+class emp_details_leave(models.Model):
+    emp_id = models.ForeignKey(emp_details, on_delete=models.CASCADE)
+    leave_id = models.ForeignKey(leave, on_delete=models.CASCADE, primary_key=True)
+    
+    def __str__(self):
+        return self.emp_id
+
+class salary(models.Model):
+    sal_id = models.CharField(max_length=10, primary_key=True)
+    month = models.CharField(max_length=10)
+    basic_sal = models.FloatField(default=0.00)
+    extra_hours = models.IntegerField(default=0)
+    extra_payment = models.FloatField(default=0.00)
+    paid_date = models.DateField(auto_now=False, auto_now_add=False)
+    paid = models.CharField(max_length=5)
+    total_payment = models.FloatField(default=0.00)
+    employee_name = models.CharField(max_length=20)
+    dept_name = models.CharField(max_length=50)
+    no_of_leaves = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.sal_id
+
+class department(models.Model):
+    dept_id = models.CharField(max_length=10, primary_key=True)
+    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
+    dept_name = models.CharField(max_length=50)
+    dept_manager_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.dept_id
+
+class dept_employee(models.Model):
+    emp_id = models.ForeignKey(emp_details, on_delete=models.CASCADE,primary_key=True)
+    dept_id = models.ForeignKey(department, on_delete=models.CASCADE)
+    from_date = models.DateField(auto_now=False,auto_now_add=False)
+    to_date = models.DateField(auto_now=False, auto_now_add=False)
+    
+    def __str__(self):
+        return self.emp_id
+
+class dept_supervisor(models.Model):
+    employee_id = models.ForeignKey(emp_details, on_delete=models.CASCADE, primary_key=True)
+    dept_id = models.ForeignKey(department, on_delete=models.CASCADE)
+    from_date = models.DateField(auto_now=False, auto_now_add=False)
+    to_date = models.DateField(auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+        return self.employee_id
+
+class dept_manager(models.Model):
+    emp_id = models.ForeignKey(emp_details, on_delete=models.CASCADE,primary_key=True)
+    dept_id = models.ForeignKey(department, on_delete=models.CASCADE)
+    from_date = models.DateField(auto_now=False, auto_now_add=False)
+    to_date = models.DateField(auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+            return self.employee_id
