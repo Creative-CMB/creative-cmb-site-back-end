@@ -8,5 +8,7 @@ urlpatterns = [
     path('new-user/', views.UserCreate, name="usersCreate"),
     path('user-update/<str:pk>/', views.UserUpdate, name="userUpdate"),
     path('user-delete/<str:pk>/', views.UserDelete, name="userDelete"),
+    path('events/', views.EventList, name="events"),
+    path('admins/', views.AdminList, name="admins"),
 
 ]
