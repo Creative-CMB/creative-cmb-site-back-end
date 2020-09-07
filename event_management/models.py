@@ -248,7 +248,7 @@ class emp_details(models.Model):
     p = (
         ("Manager","Manager"),("Supervisor","Supervisor"),("Employee","Employee")
     )
-    position = models.CharField(max_length=15,, choices= p, default="Employee")
+    position = models.CharField(max_length=15,choices= p, default="Employee")
     address = models.CharField(max_length=500)
     email = models.EmailField(max_length=50, unique=True)
     qualification = models.CharField(max_length=500)
@@ -270,7 +270,7 @@ class department(models.Model):
     dept_id = models.CharField(max_length=6, primary_key=True)
     admin_id = models.ForeignKey('admin', on_delete=models.CASCADE)
     dept_name = models.CharField(max_length=50,unique=True)
-    dept_manager_name = models.OneToOneField('emp_details',max_length=50,models.DO_NOTHING, limit_choices_to={'position': 'Manager'})
+    dept_manager_name = models.OneToOneField('emp_details',max_length=50, on_delete=models.DO_NOTHING, limit_choices_to={'position': 'Manager'})
 
     def __str__(self):
         return self.dept_id
