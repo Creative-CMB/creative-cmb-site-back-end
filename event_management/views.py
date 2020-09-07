@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import user
+from .models import admin as evtAdmin
 
 # Create your views here.
 
@@ -58,3 +59,13 @@ def UserDelete(request, pk):
     users = user.objects.get(user_id=pk)
     users.delete()
     return Response("deleted")
+
+
+@api_view(['GET'])
+def adminList(request):
+    admins = evtAdmin.objects.all()
+    serializer = UserSerializer(admins, many=True)
+    for ad in serializer.data:
+        users = user.objects.filter(user_id=ad)
+
+    return Response(users)
