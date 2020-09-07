@@ -5,13 +5,11 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
+from .serializers import TicketSerializer
 from .models import user
-<<<<<<< HEAD
-from .models import event
-=======
->>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9
 from .models import admin as evtAdmin
-
+from .models import event
+from .models import ticket
 # Create your views here.
 
 
@@ -66,9 +64,6 @@ def UserDelete(request, pk):
     users.delete()
     return Response("deleted")
 
-<<<<<<< HEAD
-# get method to fetch all objects from database and return
-
 
 @api_view(['GET'])
 def EventList(request):
@@ -78,30 +73,32 @@ def EventList(request):
 
 
 @api_view(['GET'])
-def AdminList(request):
-    userArr = []
+def adminList(request):
+    adminUserArr = []
     admins = evtAdmin.objects.all()
     for ad in admins:
-        usrad = user.objects.filter(user_id=ad)
-        username = usrad.first_name
-        userid = ad
-        tempUsr = {
-            "usrname": username,
-            "usrid": userid
-        }
+        users = user.objects.filter(admin__admin_id__user_id__startswith=ad)
+        for u in users:
+            adminUser = {
+                "username": u.first_name,
+                "id": u.user_id
+            }
+        adminUserArr.append(adminUser)
 
-        userArr.append(tempUsr)
+    return Response(adminUserArr)
 
-    #serializer = AdminSerializer(admins, many=True)
-    return Response(userArr)
-=======
+
+@api_view(['POST'])
+def TicketCreate(request):
+    serializer = TicketSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 
 @api_view(['GET'])
-def adminList(request):
-    admins = evtAdmin.objects.all()
-    serializer = UserSerializer(admins, many=True)
-    for ad in serializer.data:
-        users = user.objects.filter(user_id=ad)
-
-    return Response(users)
->>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9
+def GetTickets(request):
+    tickets = ticket.objects.all()
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data)
