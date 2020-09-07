@@ -75,7 +75,18 @@ def EventList(request):
 
 @api_view(['GET'])
 def AdminList(request):
+    userArr = []
     admins = evtAdmin.objects.all()
-    adminName = user.objects.get(user_id=admins.admin_id).evtAdmin_set.all()
-    serializer = AdminSerializer(admins, many=True)
-    return Response(serializer.data)
+    for ad in admins:
+        usrad = user.objects.filter(user_id=ad)
+        username = usrad.first_name
+        userid = ad
+        tempUsr = {
+            "usrname": username,
+            "usrid": userid
+        }
+
+        userArr.append(tempUsr)
+
+    #serializer = AdminSerializer(admins, many=True)
+    return Response(userArr)
