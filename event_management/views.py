@@ -6,7 +6,10 @@ from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
 from .models import user
+<<<<<<< HEAD
 from .models import event
+=======
+>>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9
 from .models import admin as evtAdmin
 
 # Create your views here.
@@ -63,6 +66,7 @@ def UserDelete(request, pk):
     users.delete()
     return Response("deleted")
 
+<<<<<<< HEAD
 # get method to fetch all objects from database and return
 
 
@@ -90,3 +94,14 @@ def AdminList(request):
 
     #serializer = AdminSerializer(admins, many=True)
     return Response(userArr)
+=======
+
+@api_view(['GET'])
+def adminList(request):
+    admins = evtAdmin.objects.all()
+    serializer = UserSerializer(admins, many=True)
+    for ad in serializer.data:
+        users = user.objects.filter(user_id=ad)
+
+    return Response(users)
+>>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9

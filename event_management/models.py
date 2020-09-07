@@ -37,7 +37,7 @@ class feedback(models.Model):
 
 
 class admin(models.Model):
-    admin_id = models.ForeignKey(
+    admin_id = models.OneToOneField(
         user, primary_key=True, on_delete=models.CASCADE)
 
     def __str__(self):
