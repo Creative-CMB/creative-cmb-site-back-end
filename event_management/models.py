@@ -84,7 +84,7 @@ class event(models.Model):
     eq_list = models.CharField(max_length=500)
 
     def __str__(self):
-        return self.event_id
+        return self.location
 
 
 class ticket(models.Model):
@@ -93,7 +93,7 @@ class ticket(models.Model):
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
-    status = models.CharField(max_length=50)
+    status = models.BooleanField(default=False)
     price = models.FloatField(max_length=5, default=0.00)
     expiration_date = models.DateField(auto_now=True, auto_now_add=False)
     image = models.CharField(max_length=500)
