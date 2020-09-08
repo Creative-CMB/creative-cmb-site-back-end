@@ -3,6 +3,8 @@ from .models import user
 from .models import event
 from .models import admin as evtAdmin
 from .models import ticket
+from .models import equipment
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,4 +24,10 @@ class AdminSerializer(serializers.ModelSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = ticket
+        fields = "__all__"
+
+
+class EquipmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = equipment
         fields = "__all__"

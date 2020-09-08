@@ -12,7 +12,10 @@ urlpatterns = [
     path('events/', views.EventList, name="eventList"),
     path('ticket-create/', views.TicketCreate, name="ticketCreate"),
     path('tickets/', views.GetTickets, name="tickets"),
-
-
+    path('get-equipments/', views.GetEqForEvent, name="getequipments"),
+    path('create-event/', views.EventCreate, name="createevent"),
+    path('events/', views.EventGetAll, name="eventgetall"),
+    path('events/<str:pk>/', views.EventDetail, name="eventdetail"),
+    path('event-delete/<str:pk>/', views.EvenetDelete, name="eventdelete"),
 
 ]
