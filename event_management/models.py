@@ -46,10 +46,10 @@ class admin(models.Model):
 
 class package(models.Model):
     pack_id = models.CharField(max_length=10, primary_key=True, unique=True)
-    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     pack_name = models.CharField(max_length=50)
     featuers = models.CharField(max_length=500)
     pack_type = models.CharField(max_length=100)
+    price = models.FloatField(max_length=5, default=0.00)
 
     def __str__(self):
         return self.pack_id
@@ -150,11 +150,6 @@ class payment(models.Model):
 
 class advertistment(models.Model):
     ad_id = models.CharField(max_length=10, primary_key=True, unique=True)
-    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
-    event_id = models.ForeignKey(event, on_delete=models.CASCADE)
-    pay_id = models.ForeignKey(payment, on_delete=models.CASCADE)
-    pack_id = models.ForeignKey(package, on_delete=models.CASCADE)
-    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     image = models.CharField(max_length=500)
     duration = models.CharField(max_length=50)
     date = models.DateField(auto_now=False, auto_now_add=False)
@@ -167,8 +162,6 @@ class advertistment(models.Model):
 
 class invoice(models.Model):
     invoice_id = models.CharField(max_length=10, primary_key=True)
-    pay_id = models.ForeignKey(payment, on_delete=models.CASCADE)
-    admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     order_name = models.CharField(max_length=50)
     amount = models.FloatField(default=0.00)
     inv_status = models.CharField(max_length=50)
