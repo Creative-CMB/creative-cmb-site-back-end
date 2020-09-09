@@ -68,20 +68,19 @@ class customer(models.Model):
 class event(models.Model):
     event_id = models.CharField(max_length=10, primary_key=True, unique=True)
     user_id = models.ForeignKey(user, on_delete=models.CASCADE)
+    event_name = models.CharField(max_length=100,null=True)
     budget = models.FloatField(max_length=5)
     email_address = models.CharField(max_length=50)
     occassion_type = models.CharField(max_length=10)
-    eq_quantity = models.IntegerField(max_length=10, null=True)
     time = models.TimeField(auto_now=True, auto_now_add=False)
     head_count = models.IntegerField(max_length=10)
     creator_phone = models.CharField(max_length=10)
-    schedule_file = models.CharField(max_length=500)
+    schedule_file = models.CharField(max_length=500, null=True)
     date = models.DateField(auto_now=True, auto_now_add=False)
     event_type = models.CharField(max_length=20)
     location = models.CharField(max_length=500)
     description = models.CharField(max_length=100)
     event_creator_name = models.CharField(max_length=20)
-    eq_list = models.CharField(max_length=500)
 
     def __str__(self):
         return self.location

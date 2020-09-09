@@ -2,15 +2,20 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+# serializers
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
+from .serializers import TicketSerializer
+from .serializers import EquipmentSerializer
+
+# models
 from .models import user
-<<<<<<< HEAD
-from .models import event
-=======
->>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9
 from .models import admin as evtAdmin
+from .models import event
+from .models import ticket
+from .models import equipment
 
 # Create your views here.
 
@@ -66,9 +71,6 @@ def UserDelete(request, pk):
     users.delete()
     return Response("deleted")
 
-<<<<<<< HEAD
-# get method to fetch all objects from database and return
-
 
 @api_view(['GET'])
 def EventList(request):
@@ -78,30 +80,80 @@ def EventList(request):
 
 
 @api_view(['GET'])
-def AdminList(request):
-    userArr = []
+def adminList(request):
+    adminUserArr = []
     admins = evtAdmin.objects.all()
     for ad in admins:
-        usrad = user.objects.filter(user_id=ad)
-        username = usrad.first_name
-        userid = ad
-        tempUsr = {
-            "usrname": username,
-            "usrid": userid
-        }
+        users = user.objects.filter(admin__admin_id__user_id__startswith=ad)
+        for u in users:
+            adminUser = {
+                "username": u.first_name,
+                "id": u.user_id
+            }
+        adminUserArr.append(adminUser)
 
-        userArr.append(tempUsr)
+    return Response(adminUserArr)
 
-    #serializer = AdminSerializer(admins, many=True)
-    return Response(userArr)
-=======
+
+@api_view(['POST'])
+def TicketCreate(request):
+    serializer = TicketSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
-def adminList(request):
-    admins = evtAdmin.objects.all()
-    serializer = UserSerializer(admins, many=True)
-    for ad in serializer.data:
-        users = user.objects.filter(user_id=ad)
+def GetTickets(request):
+    tickets = ticket.objects.all()
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data)
 
-    return Response(users)
->>>>>>> 36a592cd871a00f18d736e322ef1b65e34f05ee9
+# fetch the equpiments fro the create event (himasha oya wenama ekak hadanna)
+
+
+@api_view(['GET'])
+def GetEqForEvent(request):
+    eqEv = equipment.objects.all()
+    serializer = EquipmentSerializer(eqEv, many=True)
+    return Response(serializer.data)
+
+
+# event create view
+@api_view(['POST'])
+def EventCreate(request):
+    serializer = EventSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
+# fetch and terurn all the events in the db
+
+
+@api_view(['GET'])
+def EventGetAll(request):
+    events = event.objects.all()
+    serializer = EquipmentSerializer(events, many=True)
+    return Response(serializer.data)
+
+# fetch a exact event
+
+
+@api_view(['GET'])
+def EventDetail(request, pk):
+    eventDet = event.objects.get(event_id=pk)
+    serializer = EventSerializer(eventDet, many=False)
+    return Response(serializer.data)
+
+# delete the event
+
+
+@api_view(['DELETE'])
+def EvenetDelete(request, pk):
+    eventDel = event.objects.get(event_id=pk)
+    eventDel.delete()
+    return Response("deleted")
