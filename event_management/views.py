@@ -158,4 +158,10 @@ def EventDetail(request, pk):
 def EvenetDelete(request, pk):
     eventDel = event.objects.get(event_id=pk)
     eventDel.delete()
+
+
+@api_view(['DELETE'])
+def TicketDelete(request, pk):
+    tickdel = ticket.objects.get(ticket_id=pk)
+    tickdel.delete()
     return Response("deleted")
