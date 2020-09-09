@@ -2,14 +2,21 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+# serializers
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
 from .serializers import TicketSerializer
+from .serializers import EquipmentSerializer
+
+# models
 from .models import user
 from .models import admin as evtAdmin
 from .models import event
 from .models import ticket
+from .models import equipment
+
 # Create your views here.
 
 
@@ -106,9 +113,49 @@ def GetTickets(request):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
+# fetch the equpiments fro the create event (himasha oya wenama ekak hadanna)
+
+
+@api_view(['GET'])
+def GetEqForEvent(request):
+    eqEv = equipment.objects.all()
+    serializer = EquipmentSerializer(eqEv, many=True)
+    return Response(serializer.data)
+
+
+# event create view
+@api_view(['POST'])
+def EventCreate(request):
+    serializer = EventSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
+# fetch and terurn all the events in the db
+
+
+@api_view(['GET'])
+def EventGetAll(request):
+    events = event.objects.all()
+    serializer = EquipmentSerializer(events, many=True)
+    return Response(serializer.data)
+
+# fetch a exact event
+
+
+@api_view(['GET'])
+def EventDetail(request, pk):
+    eventDet = event.objects.get(event_id=pk)
+    serializer = EventSerializer(eventDet, many=False)
+    return Response(serializer.data)
+
+# delete the event
+
 
 @api_view(['DELETE'])
-def TicketDelete(request, pk):
-    tickdel = ticket.objects.get(ticket_id=pk)
-    tickdel.delete()
+def EvenetDelete(request, pk):
+    eventDel = event.objects.get(event_id=pk)
+    eventDel.delete()
     return Response("deleted")
