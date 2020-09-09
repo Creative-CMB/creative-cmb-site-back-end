@@ -87,6 +87,8 @@ def adminList(request):
 
     return Response(adminUserArr)
 
+# Ticket
+
 
 @api_view(['POST'])
 def TicketCreate(request):
@@ -97,8 +99,16 @@ def TicketCreate(request):
         return Response(new_data)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def GetTickets(request):
     tickets = ticket.objects.all()
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def TicketDelete(request, pk):
+    tickdel = ticket.objects.get(ticket_id=pk)
+    tickdel.delete()
+    return Response("deleted")
