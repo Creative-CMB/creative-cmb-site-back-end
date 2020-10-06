@@ -113,6 +113,52 @@ def GetTickets(request):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
+# fetch the equpiments fro the create event (himasha oya wenama ekak hadanna)
+
+
+@api_view(['GET'])
+def GetEqForEvent(request):
+    eqEv = equipment.objects.all()
+    serializer = EquipmentSerializer(eqEv, many=True)
+    return Response(serializer.data)
+
+
+# event create view
+@api_view(['POST'])
+def EventCreate(request):
+    serializer = EventSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
+# fetch and terurn all the events in the db
+
+
+@api_view(['GET'])
+def EventGetAll(request):
+    events = event.objects.all()
+    serializer = EquipmentSerializer(events, many=True)
+    return Response(serializer.data)
+
+# fetch a exact event
+
+
+@api_view(['GET'])
+def EventDetail(request, pk):
+    eventDet = event.objects.get(event_id=pk)
+    serializer = EventSerializer(eventDet, many=False)
+    return Response(serializer.data)
+
+# delete the event
+
+
+@api_view(['DELETE'])
+def EvenetDelete(request, pk):
+    eventDel = event.objects.get(event_id=pk)
+    eventDel.delete()
+
 
 @api_view(['DELETE'])
 def TicketDelete(request, pk):
