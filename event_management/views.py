@@ -159,9 +159,29 @@ def EvenetDelete(request, pk):
     eventDel = event.objects.get(event_id=pk)
     eventDel.delete()
 
+# event update view
+@api_view(['POST'])
+def updateEvent(request, pk):
+    eventUp = event.objects.get(event_id=pk)
+    serializer = EventSerializer(instance=eventUp,data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
 
 @api_view(['DELETE'])
 def TicketDelete(request, pk):
     tickdel = ticket.objects.get(ticket_id=pk)
     tickdel.delete()
     return Response("deleted")
+
+#return the count of events created in the system
+
+
+@api_view(['GET'])
+def EventCount(request):
+    eventCount = event.objects.all().count()
+    return Response(eventCount)
+
