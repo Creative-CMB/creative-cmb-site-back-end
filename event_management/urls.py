@@ -21,6 +21,7 @@ urlpatterns = [
     path('event-update/<str:pk>',views.updateEvent,name="event update"),
     path('ticket-delete/<str:pk>/', views.TicketDelete, name="ticketDelete"),
     path('event-count/', views.EventCount, name="event count"),
+    path('event-count/<str:pk>', views.LogUserCount, name="event count of logged users"),
     
 
 

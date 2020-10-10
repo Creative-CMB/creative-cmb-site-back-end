@@ -193,10 +193,14 @@ def TicketDelete(request, pk):
     return Response("deleted")
 
 #return the count of events created in the system
-
-
 @api_view(['GET'])
 def EventCount(request):
     eventCount = event.objects.all().count()
     return Response(eventCount)
+
+#return the event count of the logged user
+@api_view(['GET'])
+def LogUserCount(request,pk):
+    logEvent = event.objects.filter(user_id=pk).count()
+    return Response(logEvent)
 
