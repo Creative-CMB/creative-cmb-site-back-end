@@ -7,10 +7,14 @@ from django.db.models import Count
 class user(models.Model):
     user_id = models.CharField(max_length=10, primary_key=True, unique=True)
     date_of_birth = models.DateField(auto_now=False, auto_now_add=False)
-    gender = models.CharField(max_length=6)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     mobile_number = models.CharField(max_length=10)
+    email = models.EmailField(max_length=32)
+    
+    district = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+
 
     def __str__(self):
         return self.user_id
@@ -390,11 +394,8 @@ class salary(models.Model):
         ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m)
-    year = models.IntegerField(max_length=4, default="2021")
-    pr = (
-        ("Yes","Yes"),("No","No")
-    )
-    paid = models.CharField(max_length=4,choices =pr, default="No")
+    Year = models.IntegerField(max_length=4, default="2021")
+    paid = models.BooleanField()
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
