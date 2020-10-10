@@ -68,23 +68,22 @@ class customer(models.Model):
 class event(models.Model):
     event_id = models.CharField(max_length=10, primary_key=True, unique=True)
     user_id = models.ForeignKey(user, on_delete=models.CASCADE)
+    event_name = models.CharField(max_length=100,null=True)
     budget = models.FloatField(max_length=5)
     email_address = models.CharField(max_length=50)
     occassion_type = models.CharField(max_length=10)
-    eq_quantity = models.IntegerField(max_length=10, null=True)
     time = models.TimeField(auto_now=True, auto_now_add=False)
     head_count = models.IntegerField(max_length=10)
     creator_phone = models.CharField(max_length=10)
-    schedule_file = models.CharField(max_length=500)
+    schedule_file = models.CharField(max_length=500, null=True)
     date = models.DateField(auto_now=True, auto_now_add=False)
     event_type = models.CharField(max_length=20)
     location = models.CharField(max_length=500)
     description = models.CharField(max_length=100)
     event_creator_name = models.CharField(max_length=20)
-    eq_list = models.CharField(max_length=500)
 
     def __str__(self):
-        return self.event_id
+        return self.location
 
 
 class ticket(models.Model):
@@ -93,7 +92,7 @@ class ticket(models.Model):
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
-    status = models.CharField(max_length=50)
+    status = models.BooleanField(default=False)
     price = models.FloatField(max_length=5, default=0.00)
     expiration_date = models.DateField(auto_now=True, auto_now_add=False)
     image = models.CharField(max_length=500)
@@ -248,7 +247,7 @@ class inventory_items(models.Model):
 
 class emp_details(models.Model):
     emp_det_id = models.CharField(max_length=6, primary_key=True, default="")
-    admin_id = models.ForeignKey('admin',on_delete=models.CASCADE)
+    admin_id = models.ForeignKey('admin', on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=50)
     primary_phone = models.CharField(max_length=10, unique=True)
     secondary_phone = models.CharField(max_length=10, unique=True)
@@ -308,6 +307,7 @@ class dept_supervisor(models.Model):
 
     def __str__(self):
         return str(self.emp_id)
+
 
 
 class dept_employee(models.Model):
