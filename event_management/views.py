@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.mail import send_mail
+from datetime import datetime
 
 # serializers
 from .serializers import UserSerializer
@@ -126,7 +128,17 @@ def GetEqForEvent(request):
 # event create view
 @api_view(['POST'])
 def EventCreate(request):
-    serializer = EventSerializer(data=request.data)
+    getData = request.data
+    # print(getData["event_id"])
+    eventId = getData["event_id"]
+    user = getData["user_id"]
+    eventName = getData["event_name"]
+    date = getData["date"]
+    time = getData["time"]
+    d4 = datetime.today().strftime('%Y-%m-%d')
+    emailMessage = "An event has been successfully created under the event ID {} by the user registed under the user ID {} in our system. The event creation date is {}. The event detais are follows \nEvent ID : {}\nEvent Name : {}\nCreated User ID : {}\nEvent Date : {}\nEvent Time : {}".format(eventId, user, d4, eventId, eventName, user, date, time)
+    send_mail("Do not reply",emailMessage,"mlakilaliyanage@gmail.com",["mlakilaliyanage@hotmail.com"],fail_silently=False)
+    serializer = EventSerializer(data=getData)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -158,6 +170,8 @@ def EventDetail(request, pk):
 def EvenetDelete(request, pk):
     eventDel = event.objects.get(event_id=pk)
     eventDel.delete()
+
+    return Response(200)
 
 # event update view
 @api_view(['POST'])
