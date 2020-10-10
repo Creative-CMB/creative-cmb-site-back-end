@@ -37,16 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'event_management',
     'rest_framework',
     'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -131,3 +134,9 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_WHITELIST = "http://localhost:3000",
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mlakilaliyanage@gmail.com'
+EMAIL_HOST_PASSWORD = 'ockuduvcrhvzvcuo'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
