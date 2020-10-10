@@ -37,11 +37,11 @@ class feedback(models.Model):
 
 
 class admin(models.Model):
-    admin_id = models.ForeignKey(
+    admin_id = models.OneToOneField(
         user, primary_key=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.admin_id
+        return str(self.admin_id)
 
 
 class package(models.Model):
@@ -199,12 +199,13 @@ class equipment_event(models.Model):
     def __str__(self):
         return self.eq_ev_id
 
+
 class rented_item(models.Model):
-    rented_item_id = models.ForeignKey(equipment,on_delete=models.CASCADE, max_length=10, primary_key=True)
+    rented_item_id = models.ForeignKey(
+        equipment, on_delete=models.CASCADE, max_length=10, primary_key=True)
     supplier = models.CharField(max_length=50)
     rented_date = models.DateField(auto_now=True, auto_now_add=False)
     rental_period = models.CharField(max_length=10)
-    
 
     def __str__(self):
         return self.rented_item_id
@@ -223,15 +224,19 @@ class rent_details(models.Model):
     def __str__(self):
         return self.rent_id
 
+
 class customer_equipment(models.Model):
-    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE,primary_key=True)
+    cus_id = models.ForeignKey(
+        customer, on_delete=models.CASCADE, primary_key=True)
     equipment_id = models.ForeignKey(equipment, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.cus_id
 
+
 class inventory_items(models.Model):
-    item_id = models.ForeignKey(equipment_event, on_delete=models.CASCADE, primary_key=True)
+    item_id = models.ForeignKey(
+        equipment_event, on_delete=models.CASCADE, primary_key=True)
     image = models.CharField(max_length=500)
     model = models.CharField(max_length=20)
     condition = models.CharField(max_length=50)
@@ -240,137 +245,160 @@ class inventory_items(models.Model):
     def __str__(self):
         return self.item_id
 
+
 class emp_details(models.Model):
-    emp_det_id = models.CharField(max_length=6, primary_key=True,default="")
-    admin_id = models.ForeignKey('admin', on_delete=models.CASCADE)
+    emp_det_id = models.CharField(max_length=6, primary_key=True, default="")
+    admin_id = models.ForeignKey('admin',on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=50)
-    primary_phone = models.CharField(max_length=10,unique=True)
-    secondary_phone = models.CharField(max_length=10,unique=True)
+    primary_phone = models.CharField(max_length=10, unique=True)
+    secondary_phone = models.CharField(max_length=10, unique=True)
     p = (
-        ("Manager","Manager"),("Supervisor","Supervisor"),("Employee","Employee")
+        ("Manager", "Manager"), ("Supervisor",
+                                 "Supervisor"), ("Employee", "Employee")
     )
-    position = models.CharField(max_length=15, choices= p, default="Employee")
+    position = models.CharField(max_length=15, choices=p, default="Employee")
     address = models.CharField(max_length=500)
     email = models.EmailField(max_length=50, unique=True)
     qualification = models.CharField(max_length=500)
-    trained =  models.BooleanField()
     trained_years = models.IntegerField(default=0)
     dob = models.DateField(auto_now=False, auto_now_add=False, null=False)
     g = (
-        ("Male","Male"),("Female","Female")
+        ("Male", "Male"), ("Female", "Female")
     )
-    gender = models.CharField(max_length=10, choices= g, default="Male")
-    permenent = models.BooleanField()
+    gender = models.CharField(max_length=10, choices=g, default="Male")
+    r = (
+        ("Yes","Yes"),("No","No")
+    )
+    permenent = models.CharField(max_length=4,choices =r, default="No")
     joined_date = models.DateField(auto_now=True)
-    
-    
+
     def __str__(self):
         return self.emp_det_id
 
+
 class department(models.Model):
-    dept_id = models.CharField(max_length=6, primary_key=True,default="")
+    dept_id = models.CharField(max_length=6, primary_key=True, default="")
     admin_id = models.ForeignKey('admin', on_delete=models.CASCADE)
-    dept_name = models.CharField(max_length=50,unique=True)
-    dept_manager_name = models.OneToOneField('emp_details',models.DO_NOTHING, limit_choices_to={'position': 'Manager'})
+    dept_name = models.CharField(max_length=50, unique=True)
+    dept_manager_name = models.OneToOneField(
+        'emp_details', on_delete=models.CASCADE, limit_choices_to={'position': 'Manager'})
 
     def __str__(self):
         return self.dept_id
 
+
 class dept_manager(models.Model):
-    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE,primary_key=True,default="")
+    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE, primary_key=True,limit_choices_to={'position': 'Manager'})
     dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
-    from_date = models.DateField(auto_now=False,auto_now_add=False)
-    to_date = models.DateField(auto_now=False, auto_now_add=False,blank=True,null=True)
+    from_date = models.DateField(auto_now=False, auto_now_add=False)
+    to_date = models.DateField(
+        auto_now=False, auto_now_add=False, blank=True, null=True)
 
     def __str__(self):
-            return self.emp_id
+        return str(self.emp_id)
+
 
 class dept_supervisor(models.Model):
-    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE,primary_key=True,default="")
+    emp_id = models.OneToOneField(
+        'emp_details', on_delete=models.CASCADE, primary_key=True, limit_choices_to={'position': 'Supervisor'})
     dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
-    from_date = models.DateField(auto_now=False,auto_now_add=False)
-    to_date = models.DateField(auto_now=False, auto_now_add=False,blank=True,null=True)
+    from_date = models.DateField(auto_now=False, auto_now_add=False)
+    to_date = models.DateField(
+        auto_now=False, auto_now_add=False, blank=True, null=True)
 
     def __str__(self):
-        return self.emp_id
+        return str(self.emp_id)
+
 
 class dept_employee(models.Model):
-    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE,primary_key=True,default="")
+    emp_id = models.OneToOneField(
+        'emp_details',  on_delete=models.CASCADE, primary_key=True, limit_choices_to={'position': 'Employee'})
     dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
-    from_date = models.DateField(auto_now=False,auto_now_add=False)
-    to_date = models.DateField(auto_now=False, auto_now_add=False,blank=True,null=True)
-    
+    from_date = models.DateField(auto_now=False, auto_now_add=False)
+    to_date = models.DateField(
+        auto_now=False, auto_now_add=False, blank=True, null=True)
+
     def __str__(self):
-        return self.emp_id
+        return str(self.emp_id)
 
 
 class leave(models.Model):
-    leave_id = models.CharField(max_length=20, primary_key=True,default="")
-    employee_id = models.ForeignKey('emp_details',models.DO_NOTHING,default="")
-    dept_id = models.ForeignKey('department', models.DO_NOTHING,default="")
-    
+    leave_id = models.CharField(max_length=20, primary_key=True, default="")
+    emp_det_id = models.ForeignKey(
+        'emp_details', on_delete=models.CASCADE, default="")
+    dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
+
     l = (
-        ("Paid","Paid"),("Non-Paid","Non-Paid")
+        ("Paid", "Paid"), ("Non-Paid", "Non-Paid")
     )
-    leave_type = models.CharField(max_length=50, choices= l, default="Non-Paid")
+    leave_type = models.CharField(max_length=50, choices=l, default="Non-Paid")
     m = (
-        ("January","January"),("February","February"),("March","March"),("April","April"),("May","May"),("June","June"),("July","July"),("August","August"),("September","September"),("October","October"),("November","November"),("December","december")
+        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
-    month = models.CharField(max_length=10,choices= m,default="January")
-    year = models.CharField(max_length=4,default=2021)
-    date = models.DateField(auto_now=False, auto_now_add=False,null=False)
+    month = models.CharField(max_length=10, choices=m, default="January")
+    year = models.CharField(max_length=4, default=2021)
+    date = models.DateField(auto_now=False, auto_now_add=False, null=False)
     reason = models.CharField(max_length=200)
     s = (
-        ("Accepted","Accepted"),("Pending","Pending"),("Canceled","Canceled")
+        ("Accepted", "Accepted"), ("Pending", "Pending"), ("Canceled", "Canceled")
     )
-    status = models.CharField(max_length=10, choices= s, default="Pending")
+    status = models.CharField(max_length=10, choices=s, default="Pending")
 
     def __str__(self):
         return self.leave_id
 
+
 class emp_details_leave(models.Model):
     emp_id = models.ForeignKey('emp_details', on_delete=models.CASCADE)
-    leave_id = models.ForeignKey('leave', on_delete=models.CASCADE, primary_key=True,)
-    
+    leave_id = models.ForeignKey(
+        'leave', on_delete=models.CASCADE, primary_key=True,)
+
     def __str__(self):
         return self.emp_id
 
+
 class salary(models.Model):
-    sal_id = models.CharField(max_length=10, primary_key=True,default="")
-    emp_det_id = models.ForeignKey('emp_details', models.DO_NOTHING,default="")
-    dept_id = models.ForeignKey('department', models.DO_NOTHING,default="")
+    sal_id = models.CharField(max_length=10, primary_key=True, default="")
+    emp_det_id = models.ForeignKey('emp_details', on_delete=models.CASCADE, default="")
+    dept_id = models.ForeignKey('department', on_delete=models.CASCADE, default="")
     basic_sal = models.IntegerField(default=0)
     extra_hours = models.IntegerField(default=0)
     bonus = models.IntegerField(default=0)
+
     @property
     def Extra_Payment(self):
-        return self.extra_hours * 350
+        return self.extra_hours * 300
+    extra = property(Extra_Payment)
 
     @property
     def get_leave_count(self):
-        leaves = salary.objects.filter(emp_det_id=self.emp_det_id,emp_det_id__leave__month=self.month,emp_det_id__leave__Year=self.Year,emp_det_id__leave__status='Accepted').aggregate(leave_count=Count('emp_det_id__leave'))
+        leaves = salary.objects.filter(emp_det_id=self.emp_det_id, emp_det_id__leave__month=self.month, emp_det_id__leave__year=self.year,emp_det_id__leave__status='Accepted').aggregate(leave_count=Count('emp_det_id__leave'))
         return leaves['leave_count']
-    
+    Leave_count = property(get_leave_count)
+
     @property
     def leave_amount(self):
-        return self.get_leave_count * 500
+        return self.get_leave_count * 900
+    Leave_amount = property(leave_amount)
 
-    
     @property
     def Total_Payment(self):
         return self.Extra_Payment + self.basic_sal + self.bonus - self.leave_amount
+    total_Payment = property(Total_Payment)
 
     m = (
-        ("January","January"),("February","February"),("March","March"),("April","April"),("May","May"),("June","June"),("July","July"),("August","August"),("September","September"),("October","October"),("November","November"),("December","december")
+        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
-    month = models.CharField(max_length=10, choices= m)
-    year = models.IntegerField(max_length=4,default="2021")
-    paid = models.BooleanField()
-    Paid_Date = models.DateField(null=True,blank=True)
+    month = models.CharField(max_length=10, choices=m)
+    year = models.IntegerField(max_length=4, default="2021")
+    pr = (
+        ("Yes","Yes"),("No","No")
+    )
+    paid = models.CharField(max_length=4,choices =pr, default="No")
+    Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.sal_id
-
 
 
 
