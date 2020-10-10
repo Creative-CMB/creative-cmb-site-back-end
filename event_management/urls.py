@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('api/', views.get_api_url_patterns),
-    path('users/', views.UserList, name="users"), 
+    path('users/', views.UserList, name="users"),
     path('users/<str:pk>/', views.UserListDetail, name="usersDetails"),
     path('new-user/', views.UserCreate, name="usersCreate"),
     path('user-update/<str:pk>/', views.UserUpdate, name="userUpdate"),
@@ -18,11 +18,14 @@ urlpatterns = [
     path('events/', views.EventGetAll, name="eventgetall"),
     path('events/<str:pk>/', views.EventDetail, name="eventdetail"),
     path('event-delete/<str:pk>/', views.EvenetDelete, name="eventdelete"),
-    path('event-update/<str:pk>',views.updateEvent,name="event update"),
+    path('event-update/<str:pk>', views.updateEvent, name="event update"),
     path('ticket-delete/<str:pk>/', views.TicketDelete, name="ticketDelete"),
     path('event-count/', views.EventCount, name="event count"),
-    path('event-count/<str:pk>', views.LogUserCount, name="event count of logged users"),
-    
+    path('event-count/<str:pk>', views.LogUserCount,
+         name="event count of logged users"),
+    path('my-events/<str:pk>/', views.getLoggedUserEvents,
+         name="event of logged user"),
+
 
 
 
