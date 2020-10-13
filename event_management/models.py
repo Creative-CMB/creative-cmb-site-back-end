@@ -331,7 +331,7 @@ class dept_employee(models.Model):
 
 
 class leave(models.Model):
-    leave_id = models.CharField(max_length=20, primary_key=True, default="")
+    leave_id = models.CharField(max_length=20, primary_key=True, )
     emp_det_id = models.ForeignKey(
         'emp_details', on_delete=models.CASCADE, default="")
     dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
@@ -366,9 +366,9 @@ class emp_details_leave(models.Model):
 
 
 class salary(models.Model):
-    sal_id = models.CharField(max_length=10, primary_key=True, default="")
-    emp_det_id = models.ForeignKey('emp_details', on_delete=models.CASCADE, default="")
-    dept_id = models.ForeignKey('department', on_delete=models.CASCADE, default="")
+    sal_id = models.CharField(max_length=10, primary_key=True)
+    emp_det_id = models.ForeignKey('emp_details', on_delete=models.CASCADE)
+    dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
     basic_sal = models.IntegerField(default=0)
     extra_hours = models.IntegerField(default=0)
     bonus = models.IntegerField(default=0)
@@ -399,7 +399,8 @@ class salary(models.Model):
     )
     month = models.CharField(max_length=10, choices=m)
     Year = models.IntegerField(max_length=4, default="2021")
-    paid = models.BooleanField()
+    y=(("Yes","Yes"),("No","No"))
+    paid = models.CharField(max_length=10, choices=y)
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
