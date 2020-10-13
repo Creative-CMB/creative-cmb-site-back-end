@@ -7,6 +7,7 @@ from .models import user,emp_details,department,dept_supervisor,dept_manager,dep
 from .models import admin as evtAdmin
 from django.core.mail import send_mail
 from datetime import datetime
+from django.db.models import Count
 
 # serializers
 from .serializers import UserSerializer
@@ -572,4 +573,21 @@ def getLoggedUserEvents(request,pk):
     logEvents = event.objects.all().filter(user_id=pk)
     serializer = EventSerializer(logEvents, many=True)
     return Response(serializer.data)
+
+
+#return the number of users who has created events in the system
+@api_view(['GET'])
+def getTotCusEventCount(request):
+    cusEventCount = event.objects.values("user_id").distinct().count()
+    return Response(cusEventCount)
+
+    #return the number of users who has created events in the system
+
+
+@api_view(['GET'])
+def getEventMonthCount(request):
+    # monthCount = event.objects.values("created_month").distinct()
+    monthCount = event.objects.values(
+        "created_month").order_by("created_month").annotate(count=Count("created_month"))
+    return Response(monthCount)
 

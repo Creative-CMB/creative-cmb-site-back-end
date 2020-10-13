@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Count
+import datetime
 
 # Create your models here.
 
@@ -85,6 +86,9 @@ class event(models.Model):
     location = models.CharField(max_length=500)
     description = models.CharField(max_length=100)
     event_creator_name = models.CharField(max_length=20)
+    d = datetime.datetime.now()
+    created_month = models.CharField(
+        max_length=5, default=datetime.datetime.now().strftime('%B'))
 
     def __str__(self):
         return self.location
