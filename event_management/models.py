@@ -325,7 +325,7 @@ class dept_employee(models.Model):
 class leave(models.Model):
     leave_id = models.CharField(max_length=20, primary_key=True, default="")
     emp_det_id = models.ForeignKey(
-        'emp_details', on_delete=models.CASCADE, default="")
+        'emp_details', on_delete=models.CASCADE)
     dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
 
     l = (
