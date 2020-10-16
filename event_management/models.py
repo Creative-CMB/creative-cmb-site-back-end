@@ -102,7 +102,7 @@ class ticket(models.Model):
     tkt_type = models.CharField(max_length=50)
     status = models.BooleanField(default=False)
     price = models.FloatField(max_length=5, default=0.00)
-    expiration_date = models.DateField(auto_now=True, auto_now_add=False)
+    expiration_date = models.DateField(auto_now=False, auto_now_add=False)
     image = models.CharField(max_length=500)
     no_of_tickets = models.IntegerField(max_length=5)
 

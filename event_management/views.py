@@ -299,6 +299,32 @@ def GetBatchTickets(request):
     return Response(serializer.data)
 
 
+# new api ticket
+@api_view(['GET'])
+def bookingEntries(request):
+    tickets = ticket.objects.all()
+    array = []
+    bid = ''
+    btid = ''
+
+    for t in tickets:
+        batches = batch.objects.filter(ticket_id=t.ticket_id)
+        for b in batches:
+            batchticks = batch_ticket.objects.filter(batch_id=b.batch_id)
+            for btickets in batchticks:
+                obj = {
+                    "ticket_id": t.ticket_id,
+                    "batch_id": b.batch_id,
+                    "batch_ticket_id": btickets.batch_ticket_id,
+                    "ticket_name": t.tkt_name,
+                    "ticket_price": t.price,
+                    "ticket_quantity": t.no_of_tickets
+                }
+
+                array.append(obj)
+    return Response(array)
+
+
 # Department
 
 @api_view(['GET'])

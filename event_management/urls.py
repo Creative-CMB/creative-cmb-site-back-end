@@ -27,7 +27,8 @@ urlpatterns = [
     path('batchTicket-create/', views.createBatchTicket, name="batchTicketCreate"),
     path('batchTickets/', views.GetBatchTickets, name="batchTickets"),
 
-
+     #booking     
+     path('displayentries/', views.bookingEntries, name='booking'),
 
 
 
