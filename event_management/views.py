@@ -13,7 +13,7 @@ from django.db.models import Count
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
-from .serializers import TicketSerializer
+from .serializers import TicketSerializer, RentalSerializer, InvenItemSerializer, Rental_DetailsSerializer
 from .serializers import EquipmentSerializer
 
 # models
@@ -21,7 +21,7 @@ from .models import user
 from .models import admin as evtAdmin
 from .models import event
 from .models import ticket
-from .models import equipment
+from .models import equipment, rental, inventory_items, rented_item, rental_details
 
 # Create your views here.
 
@@ -591,3 +591,37 @@ def getEventMonthCount(request):
         "created_month").order_by("created_month").annotate(count=Count("created_month"))
     return Response(monthCount)
 
+
+
+#views Himasha
+#create rental
+@api_view(['POST'])
+def createRental(request):
+    serializer = RentalSerializer(data= request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+#get selected items
+@api_view(['GET'])
+def getrental(request):
+    rentals = rental.objects.all()
+    serializer = RentalSerializer(rentals, many=True)
+    return Response(serializer.data)
+
+#update rental details
+@api_view(['PATCH'])
+def updateRental(request, pk):
+    rentals = rental.objects.get(rent_equipment_id=pk)
+    serializer = RentalSerializer(instance=rentals, data=request.data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+#delete rental details
+@api_view(['DELETE'])
+def deleteRental(request, pk):
+    r_items = rental.objects.get(rent_equipment_id=pk)
+    r_items.delete()
+    return Response("deleted")

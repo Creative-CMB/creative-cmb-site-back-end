@@ -34,6 +34,15 @@ urlpatterns = [
 
  path('admin-list/', views.adminList, name="adminlist"),
 
+
+
+
+	#equipment and rental Himasha
+	path('create-rental/', views.createRental, name="createRental"),
+    path('rental-details/', views.getrental, name="rentalDetails"),
+    path('update-rental/<str:pk>/', views.updateRental, name="updateRental"),
+    path('delete-rental/<str:pk>/', views.deleteRental, name="deleteRental"),
+
     #Employee Details
     path('EmployeeDetail-list/', views.EmployeeDetailList, name="EmployeeDetail-list"),
 	path('EmployeeDetail-View/<str:pk>/', views.EmployeeDetailView, name="EmployeeDetail-View"),

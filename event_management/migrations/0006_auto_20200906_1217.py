@@ -19,19 +19,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='rent_details',
-            fields=[
-                ('rent_id', models.CharField(max_length=10, primary_key=True, serialize=False)),
-                ('rental_date', models.DateField(auto_now=True)),
-                ('rental_period', models.CharField(max_length=10)),
-                ('status', models.CharField(max_length=10)),
-                ('price', models.FloatField(default=0.0)),
-                ('qty', models.IntegerField()),
-                ('eq_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event_management.equipment')),
-                ('pay_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event_management.payment')),
-            ],
-        ),
-        migrations.CreateModel(
             name='rented_item',
             fields=[
                 ('rented_item_id', models.ForeignKey(max_length=10, on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='event_management.equipment')),

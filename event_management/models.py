@@ -217,11 +217,19 @@ class rented_item(models.Model):
     def __str__(self):
         return self.rented_item_id
 
+class rental(models.Model):
+    rent_equipment_id = models.CharField(primary_key = True, max_length = 10)
+    equipment_id = models.ForeignKey(equipment, on_delete=models.CASCADE)
+    name = models.CharField(max_length = 15, default= "null")
+    quantity = models.IntegerField(default= 0)
+    price = models.FloatField(default= 00.00)
 
-class rent_details(models.Model):
+    def __str__(self):
+        return self.rent_equipment_id
+
+class rental_details(models.Model):
     rent_id = models.CharField(max_length=10, primary_key=True)
     pay_id = models.ForeignKey(payment, on_delete=models.CASCADE)
-    eq_id = models.ForeignKey(equipment, on_delete=models.CASCADE)
     rental_date = models.DateField(auto_now=True)
     rental_period = models.CharField(max_length=10)
     status = models.CharField(max_length=10)
@@ -242,7 +250,7 @@ class customer_equipment(models.Model):
 
 
 class inventory_items(models.Model):
-    item_id = models.ForeignKey(
+    item_id = models.OneToOneField(
         equipment_event, on_delete=models.CASCADE, primary_key=True)
     image = models.CharField(max_length=500)
     model = models.CharField(max_length=20)

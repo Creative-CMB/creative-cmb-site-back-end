@@ -4,7 +4,7 @@ from .models import user
 from .models import event
 from .models import admin as evtAdmin
 from .models import ticket
-from .models import equipment
+from .models import equipment, rental, rented_item, inventory_items, rental_details
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -66,3 +66,26 @@ class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = equipment
         fields = "__all__"
+
+
+class InvenItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = inventory_items
+        fields = '__all__'
+
+class RentedItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = rented_item
+        fields = '__all__'
+
+
+class RentalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = rental
+        fields = '__all__'
+
+
+class Rental_DetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = rental_details
+        fields = '__all__'
