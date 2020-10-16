@@ -643,11 +643,6 @@ def SalaryDelete(request, pk):
 # End Deepika
 
 
-def TicketDelete(request, pk):
-    tickdel = ticket.objects.get(ticket_id=pk)
-    tickdel.delete()
-    return Response("deleted")
-
 # return the count of events created in the system
 
 
