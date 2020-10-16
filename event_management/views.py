@@ -210,9 +210,10 @@ def EmployeeDetailCreate(request):
 def EmployeeDetailsUpdate(request, pk):
     empupdate = emp_details.objects.get(emp_det_id=pk)
     serializer = Employee_DetailSerializer(instance=empupdate,data=request.data)
+
+
+
 # Ticket
-
-
 @api_view(['POST'])
 def TicketCreate(request):
     serializer = TicketSerializer(data=request.data)
@@ -221,6 +222,73 @@ def TicketCreate(request):
         new_data = serializer.data
         return Response(new_data)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def GetTickets(request):
+    tickets = ticket.objects.all()
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def TicketDelete(request, pk):
+    tickdel = ticket.objects.get(ticket_id=pk)
+    tickdel.delete()
+    return Response("deleted")
+
+
+@api_view(['PATCH'])
+def TicketUpdate(request, pk):
+    ticketup = ticket.objects.get(ticket_id=pk)
+    serializer = TicketSerializer(
+        instance=ticketup, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def TicketListDetail(request, pk):
+    ticketdetail = ticket.objects.get(ticket_id=pk)
+    serializer = TicketSerializer(ticketdetail, many=False)
+    return Response(serializer.data)
+
+# batch
+@api_view(['POST'])
+def createBatch(request):
+    serializer = BatchSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def GetBatches(request):
+    batches = batch.objects.all()
+    serializer = BatchSerializer(batches, many=True)
+    return Response(serializer.data)
+
+
+# batch ticket
+@api_view(['POST'])
+def createBatchTicket(request):
+    serializer = Ticket_BatchSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def GetBatchTickets(request):
+    batchtickets = batch_ticket.objects.all()
+    serializer = Ticket_BatchSerializer(batchtickets, many=True)
+    return Response(serializer.data)
+
+
+
 
 
 @api_view(['DELETE'])

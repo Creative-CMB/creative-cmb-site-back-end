@@ -10,16 +10,34 @@ urlpatterns = [
     path('user-delete/<str:pk>/', views.UserDelete, name="userDelete"),
     path('admin-list/', views.adminList, name="adminlist"),
     path('events/', views.EventList, name="eventList"),
-    # ticket
+
+	
+  # ticket
     path('ticket-create/', views.TicketCreate, name="ticketCreate"),
     path('tickets/', views.GetTickets, name="tickets"),
-    path('get-equipments/', views.GetEqForEvent, name="getequipments"),
+    path('ticket-delete/<str:pk>/', views.TicketDelete, name="ticketDelete"),
+    path('ticket-update/<str:pk>/', views.TicketUpdate, name="ticketUpdate"),
+    path('ticket-detail/<str:pk>/', views.TicketListDetail, name="ticketDetails"),
+
+    # batch
+    path('batch-create/', views.createBatch, name="batchCreate"),
+    path('batches/', views.GetBatches, name="batches"),
+
+    #batch ticket
+    path('batchTicket-create/', views.createBatchTicket, name="batchTicketCreate"),
+    path('batchTickets/', views.GetBatchTickets, name="batchTickets"),
+    
+	
+	
+	
+	
+	path('get-equipments/', views.GetEqForEvent, name="getequipments"),
     path('create-event/', views.EventCreate, name="createevent"),
     path('events/', views.EventGetAll, name="eventgetall"),
     path('events/<str:pk>/', views.EventDetail, name="eventdetail"),
     path('event-delete/<str:pk>/', views.EvenetDelete, name="eventdelete"),
     path('event-update/<str:pk>', views.updateEvent, name="event update"),
-    path('ticket-delete/<str:pk>/', views.TicketDelete, name="ticketDelete"),
+    #path('ticket-delete/<str:pk>/', views.TicketDelete, name="ticketDelete"),
     path('event-count/', views.EventCount, name="event count"),
     path('event-count/<str:pk>', views.LogUserCount,
          name="event count of logged users"),
