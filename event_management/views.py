@@ -214,6 +214,14 @@ def EmployeeDetailsUpdate(request, pk):
         instance=empupdate, data=request.data)
 
 
+@api_view(['DELETE'])
+def EmployeeDetailDelete(request, pk):
+    empdetail = emp_details.objects.get(emp_det_id=pk)
+    empdetail.delete()
+
+    return Response('Employee Detail succsesfully delete!')
+
+
 # Ticket
 @api_view(['POST'])
 def TicketCreate(request):
@@ -289,14 +297,6 @@ def GetBatchTickets(request):
     batchtickets = batch_ticket.objects.all()
     serializer = Ticket_BatchSerializer(batchtickets, many=True)
     return Response(serializer.data)
-
-
-@api_view(['DELETE'])
-def EmployeeDetailDelete(request, pk):
-    empdetail = emp_details.objects.get(emp_det_id=pk)
-    empdetail.delete()
-
-    return Response('Employee Detail succsesfully delete!')
 
 
 # Department
@@ -376,15 +376,6 @@ def DepartmentManagerUpdate(request, pk):
     departmentmanager = dept_manager.objects.get(emp_id=pk)
     serializer = DeptManagerSerializer(
         instance=departmentmanager, data=request.data)
-
-
-@api_view(['GET'])
-def GetTickets(request):
-    tickets = ticket.objects.all()
-    serializer = TicketSerializer(tickets, many=True)
-    return Response(serializer.data)
-
-# fetch the equpiments fro the create event (himasha oya wenama ekak hadanna)
 
 
 @api_view(['GET'])
