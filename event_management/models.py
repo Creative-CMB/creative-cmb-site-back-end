@@ -112,7 +112,7 @@ class ticket(models.Model):
 
 class batch(models.Model):
     batch_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    ticket_id = models.ForeignKey(ticket, on_delete=models.CASCADE)
+    ticket_id = models.OneToOneField(ticket, on_delete=models.CASCADE)
     qty = models.IntegerField()
 
     def __str__(self):
@@ -123,7 +123,7 @@ class batch_ticket(models.Model):
     batch_ticket_id = models.CharField(
         max_length=10, primary_key=True, unique=True)
     batch_id = models.ForeignKey(batch, on_delete=models.CASCADE)
-    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
+    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE, null=True)
     availability_status = models.CharField(max_length=20)
 
     def __str__(self):
