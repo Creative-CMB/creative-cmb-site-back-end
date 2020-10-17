@@ -105,7 +105,7 @@ class ticket(models.Model):
     tkt_type = models.CharField(max_length=50)
     status = models.BooleanField(default=False)
     price = models.FloatField(max_length=5, default=0.00)
-    expiration_date = models.DateField(auto_now=True, auto_now_add=False)
+    expiration_date = models.DateField(auto_now=False, auto_now_add=False)
     image = models.CharField(max_length=500)
     no_of_tickets = models.IntegerField(max_length=5)
 
@@ -115,7 +115,7 @@ class ticket(models.Model):
 
 class batch(models.Model):
     batch_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    ticket_id = models.ForeignKey(ticket, on_delete=models.CASCADE)
+    ticket_id = models.OneToOneField(ticket, on_delete=models.CASCADE)
     qty = models.IntegerField()
 
     def __str__(self):
@@ -126,7 +126,7 @@ class batch_ticket(models.Model):
     batch_ticket_id = models.CharField(
         max_length=10, primary_key=True, unique=True)
     batch_id = models.ForeignKey(batch, on_delete=models.CASCADE)
-    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
+    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE, null=True)
     availability_status = models.CharField(max_length=20)
 
     def __str__(self):
@@ -334,7 +334,7 @@ class dept_employee(models.Model):
 
 
 class leave(models.Model):
-    leave_id = models.CharField(max_length=20, primary_key=True, default="")
+    leave_id = models.CharField(max_length=20, primary_key=True, )
     emp_det_id = models.ForeignKey(
         'emp_details', on_delete=models.CASCADE, default="")
     dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
@@ -369,9 +369,9 @@ class emp_details_leave(models.Model):
 
 
 class salary(models.Model):
-    sal_id = models.CharField(max_length=10, primary_key=True, default="")
-    emp_det_id = models.ForeignKey('emp_details', on_delete=models.CASCADE, default="")
-    dept_id = models.ForeignKey('department', on_delete=models.CASCADE, default="")
+    sal_id = models.CharField(max_length=10, primary_key=True)
+    emp_det_id = models.ForeignKey('emp_details', on_delete=models.CASCADE)
+    dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
     basic_sal = models.IntegerField(default=0)
     extra_hours = models.IntegerField(default=0)
     bonus = models.IntegerField(default=0)
@@ -402,7 +402,8 @@ class salary(models.Model):
     )
     month = models.CharField(max_length=10, choices=m)
     Year = models.IntegerField(max_length=4, default="2021")
-    paid = models.BooleanField()
+    y=(("Yes","Yes"),("No","No"))
+    paid = models.CharField(max_length=10, choices=y)
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
