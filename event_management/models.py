@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Count
 import datetime
+from time import gmtime, strftime
 
 # Create your models here.
 
@@ -89,6 +90,8 @@ class event(models.Model):
     d = datetime.datetime.now()
     created_month = models.CharField(
         max_length=5, default=datetime.datetime.now().strftime('%B'))
+    created_date = models.CharField(
+        max_length=20, default=strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 
     def __str__(self):
         return self.location

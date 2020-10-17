@@ -581,13 +581,21 @@ def getTotCusEventCount(request):
     cusEventCount = event.objects.values("user_id").distinct().count()
     return Response(cusEventCount)
 
-    #return the number of users who has created events in the system
 
-
+#return the count of events in the relevent month
 @api_view(['GET'])
 def getEventMonthCount(request):
     # monthCount = event.objects.values("created_month").distinct()
     monthCount = event.objects.values(
         "created_month").order_by("created_month").annotate(count=Count("created_month"))
     return Response(monthCount)
+
+
+#return the the user actions
+@api_view(['GET'])
+def getEventMonthCount(request):
+    # monthCount = event.objects.values("created_month").distinct()
+    action = event.objects.values(
+        "created_date").order_by("created_date").annotate(userid=Count("created_month"))
+    return Response(action)
 
