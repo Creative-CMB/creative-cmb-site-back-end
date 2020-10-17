@@ -8,6 +8,7 @@ from .models import admin as evtAdmin
 from django.core.mail import send_mail
 from datetime import datetime
 from django.db.models import Count
+import time
 
 # serializers
 from .serializers import UserSerializer
@@ -225,11 +226,15 @@ def EmployeeDetailDelete(request, pk):
 # Ticket
 @api_view(['POST'])
 def TicketCreate(request):
-    serializer = TicketSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save()
-        new_data = serializer.data
-        return Response(new_data)
+    try:
+        serializer = TicketSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            new_data = serializer.data
+        #return Response(new_data)
+    except Exception as e:
+        print(e)
+   
     return Response(serializer.data)
 
 
@@ -287,12 +292,17 @@ def GetBatches(request):
 # batch ticket
 @api_view(['POST'])
 def createBatchTicket(request):
-    serializer = Ticket_BatchSerializer(data=request.data)
-    print(serializer.initial_data)
-    if serializer.is_valid():
-        print(serializer.data)
-        batch_ticket.objects.bulk_create(serializer.initial_data)
+    try:
+       serializer = Ticket_BatchSerializer(data=request.data)
+       if serializer.is_valid(raise_exception=True):
+           serializer.save()
+           new_data = serializer.data
+           return Response(new_data)
+    except Exception as e:
+        print(e)
+
     return Response(serializer.data)
+    
 
 
 @api_view(['GET'])
@@ -704,4 +714,13 @@ def getEventMonthCount(request):
     monthCount = event.objects.values(
         "created_month").order_by("created_month").annotate(count=Count("created_month"))
     return Response(monthCount)
-    
+
+#return the count of events in the relevent month
+
+
+@api_view(['GET'])
+def userActions(request):
+    # monthCount = event.objects.values("created_month").distinct()
+    action = event.objects.all().order_by("-created_date")
+    serializer = EventSerializer(action,many=True)
+    return Response(serializer.data)

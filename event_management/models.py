@@ -91,7 +91,7 @@ class event(models.Model):
     created_month = models.CharField(
         max_length=5, default=datetime.datetime.now().strftime('%B'))
     created_date = models.CharField(
-        max_length=20, default=strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+        max_length=20, default=datetime.datetime.now())
 
     def __str__(self):
         return self.location
@@ -99,7 +99,7 @@ class event(models.Model):
 
 class ticket(models.Model):
     ticket_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    event_id = models.ForeignKey(event, on_delete=models.CASCADE)
+    event_id = models.OneToOneField(event, on_delete=models.CASCADE)
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)

@@ -46,6 +46,7 @@ urlpatterns = [
          name="event of logged user"),
     path('event-user-count/', views.getTotCusEventCount, name="event user count"),
     path('event-month-count/', views.getEventMonthCount, name="event month count"),
+    path('actions/', views.userActions, name="actions"),
 
 
 
