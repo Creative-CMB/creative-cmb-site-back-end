@@ -283,12 +283,15 @@ def GetBatches(request):
     return Response(serializer.data)
 
 
+
 # batch ticket
 @api_view(['POST'])
 def createBatchTicket(request):
     serializer = Ticket_BatchSerializer(data=request.data)
+    print(serializer.initial_data)
     if serializer.is_valid():
-        serializer.save()
+        print(serializer.data)
+        batch_ticket.objects.bulk_create(serializer.initial_data)
     return Response(serializer.data)
 
 
