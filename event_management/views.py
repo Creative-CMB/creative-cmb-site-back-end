@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer, Employee_DetailSerializer, DepartmentSerializer, DeptEmpSerializer, DeptManagerSerializer, DeptSuperSerializer, LeaveSerializer, SalarieSerializer
-from .models import user, emp_details, department, dept_supervisor, dept_manager, dept_employee, leave, salary
+from .serializers import UserSerializer, Employee_DetailSerializer, DepartmentSerializer, DeptEmpSerializer, DeptManagerSerializer, DeptSuperSerializer,  SalarieSerializer
+from .models import user, emp_details, department, dept_supervisor, dept_manager, dept_employee, salary
 from .models import admin as evtAdmin
 from django.core.mail import send_mail
 from datetime import datetime
@@ -555,44 +555,6 @@ def DepartmentEmployeeDelete(request, pk):
 
     return Response('Employee Detail succsesfully deleted!')
 
-# Leave
-
-
-@api_view(['GET'])
-def LeaveList(request):
-    leave1 = leave.objects.all()
-    serializer = LeaveSerializer(leave1, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def LeaveView(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    serializer = LeaveSerializer(leave1, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-def LeaveCreate(request):
-    serializer = LeaveSerializer(data=request.data)
-
-    if serializer.is_valid():
-        serializer.save()
-
-    return Response(serializer.data)
-
-
-@api_view(['PATCH'])
-def LeaveUpdate(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    serializer = LeaveSerializer(partial=True,instance=leave1, data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save()
-        new_data = serializer.data
-        return Response(new_data)
-    return Response(serializer.data)
-# fetch and terurn all the events in the db
-
 
 @api_view(['GET'])
 def EventGetAll(request):
@@ -631,14 +593,6 @@ def updateEvent(request, pk):
         new_data = serializer.data
         return Response(new_data)
     return Response(serializer.data)
-
-
-@api_view(['DELETE'])
-def LeaveDelete(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    leave1.delete()
-
-    return Response('Leave Detail succsesfully deleted!')
 
 # Salary
 
