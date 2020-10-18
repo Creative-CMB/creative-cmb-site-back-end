@@ -208,11 +208,16 @@ def EmployeeDetailCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def EmployeeDetailsUpdate(request, pk):
     empupdate = emp_details.objects.get(emp_det_id=pk)
-    serializer = Employee_DetailSerializer(
+    serializer = Employee_DetailSerializer( partial=True,
         instance=empupdate, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 
 
 @api_view(['DELETE'])
@@ -364,11 +369,11 @@ def DepartmentCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentUpdate(request, pk):
-    department = department.objects.get(dept_id=pk)
-    serializer = Employee_DetailSerializer(
-        instance=department, data=request.data)
+    department1 = department.objects.get(dept_id=pk)
+    serializer = DepartmentSerializer(partial=True,
+        instance=department1, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -410,11 +415,16 @@ def DepartmantManagerCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentManagerUpdate(request, pk):
     departmentmanager = dept_manager.objects.get(emp_id=pk)
-    serializer = DeptManagerSerializer(
+    serializer = DeptManagerSerializer(partial=True,
         instance=departmentmanager, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -481,10 +491,10 @@ def DepartmentSupervisorCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentSupervisorUpdate(request, pk):
     departmentsuper = dept_supervisor.objects.get(emp_id=pk)
-    serializer = DeptSuperSerializer(
+    serializer = DeptSuperSerializer(partial=True,
         instance=departmentsuper, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
@@ -527,10 +537,10 @@ def DepartmentEmployeeCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentEmployeeUpdate(request, pk):
     departmentemp = dept_employee.objects.get(emp_id=pk)
-    serializer = DeptEmpSerializer(instance=departmentemp, data=request.data)
+    serializer = DeptEmpSerializer( partial=True,instance=departmentemp, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -572,10 +582,15 @@ def LeaveCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def LeaveUpdate(request, pk):
     leave1 = leave.objects.get(leave_id=pk)
-    serializer = DeptEmpSerializer(instance=leave1, data=request.data)
+    serializer = LeaveSerializer(partial=True,instance=leave1, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 # fetch and terurn all the events in the db
 
 
@@ -652,10 +667,10 @@ def SalaryCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def SalaryUpdate(request, pk):
-    salary1 = salary.objects.get(emp_id=pk)
-    serializer = SalarieSerializer(instance=salary1, data=request.data)
+    salary1 = salary.objects.get(sal_id=pk)
+    serializer = SalarieSerializer(partial=True,instance=salary1, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
