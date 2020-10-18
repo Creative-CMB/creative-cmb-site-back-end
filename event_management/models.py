@@ -136,7 +136,7 @@ class reservation(models.Model):
     batch_ticket_id = models.ForeignKey(batch_ticket, on_delete=models.CASCADE)
     event_id = models.ForeignKey(event, on_delete=models.CASCADE)
     cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
-    date = models.DateField(auto_now=True, auto_now_add=False)
+    date = models.DateField(auto_now=False, auto_now_add=False)
     status = models.CharField(max_length=20)
 
     def __str__(self):

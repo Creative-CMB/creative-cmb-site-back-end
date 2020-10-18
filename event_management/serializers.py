@@ -3,7 +3,7 @@ from .models import user,emp_details,department,dept_employee,dept_manager,dept_
 from .models import user
 from .models import event
 from .models import admin as evtAdmin
-from .models import ticket,batch_ticket,batch
+from .models import ticket,batch_ticket,batch, reservation
 from .models import equipment
 
 
@@ -76,4 +76,10 @@ class Ticket_BatchSerializer(serializers.ModelSerializer):
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = equipment
+        fields = "__all__"
+
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = reservation
         fields = "__all__"

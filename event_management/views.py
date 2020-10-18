@@ -13,14 +13,14 @@ from django.db.models import Count
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
-from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer
+from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer, ReservationSerializer
 from .serializers import EquipmentSerializer
 
 # models
 from .models import user
 from .models import admin as evtAdmin
 from .models import event
-from .models import ticket, batch, batch_ticket
+from .models import ticket, batch, batch_ticket, reservation
 from .models import equipment
 
 # Create your views here.
@@ -283,7 +283,6 @@ def GetBatches(request):
     return Response(serializer.data)
 
 
-
 # batch ticket
 @api_view(['POST'])
 def createBatchTicket(request):
@@ -299,6 +298,32 @@ def createBatchTicket(request):
 def GetBatchTickets(request):
     batchtickets = batch_ticket.objects.all()
     serializer = Ticket_BatchSerializer(batchtickets, many=True)
+    return Response(serializer.data)
+
+# reservation
+
+
+@api_view(['POST'])
+def ReservationCreate(request):
+    serializer = ReservationSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def GetReserveTickets(request):
+    restickets = reservation.objects.all()
+    serializer = ReservationSerializer(restickets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def GetReservationByID(request, id):
+    getReservation = reservation.objects.filter(cus_id=id)
+    serializer = ReservationSerializer(getReservation, many=True)
     return Response(serializer.data)
 
 
@@ -321,7 +346,9 @@ def bookingEntries(request):
                     "batch_ticket_id": btickets.batch_ticket_id,
                     "ticket_name": t.tkt_name,
                     "ticket_price": t.price,
-                    "ticket_quantity": t.no_of_tickets
+                    "ticket_type": t.tkt_type,
+                    "ticket_quantity": t.no_of_tickets,
+                    # "ticket_event_id": t.event_id,
                 }
 
                 array.append(obj)
