@@ -32,16 +32,37 @@ urlpatterns = [
 
 
 
- path('admin-list/', views.adminList, name="adminlist"),
+ 	path('admin-list/', views.adminList, name="adminlist"),
 
 
 
 
-	#equipment and rental Himasha
+	#Inventory management and equipment rental (Himasha)
+	#rental
 	path('create-rental/', views.createRental, name="createRental"),
     path('rental-details/', views.getrental, name="rentalDetails"),
+	path('rental-by-id/<str:id>/', views.getRentalById, name="rentalById"),
     path('update-rental/<str:pk>/', views.updateRental, name="updateRental"),
     path('delete-rental/<str:pk>/', views.deleteRental, name="deleteRental"),
+
+
+	path('add-rental-details/', views.createRentalDetails, name="addRentDetails"),
+	path('rentalDetailsById/<str:id>/', views.getRentalDetailsById, name="rentalDetailsByID"),
+	path('rentalDetails/', views.getRentalDetails, name="rental_details"),
+
+	#equipment
+	path('equipment-create/', views.CreateEquipment, name="equipmentCreate"),
+	path('equipment-list/', views.ListEquipment, name="equipmentList"),
+	path('equipment-update/<str:pk>/', views.UpdateEquipment, name="updateEquipment"),
+	#inventory
+    path('createInventory/', views.createInventory, name="createInventory"),
+	path('listInventory/', views.ListInventory, name="listInventory"),
+	path('inventory-del/<str:pk>/', views.DeleteEquipment, name="deleteEquipment"),
+	
+    
+
+
+
 
     #Employee Details
     path('EmployeeDetail-list/', views.EmployeeDetailList, name="EmployeeDetail-list"),
