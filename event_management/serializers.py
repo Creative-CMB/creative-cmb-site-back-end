@@ -1,10 +1,12 @@
 from rest_framework import serializers
-from .models import user,emp_details,department,dept_employee,dept_manager,dept_supervisor,salary,leave
+from .models import user,emp_details,department,dept_employee,dept_manager,dept_supervisor,salary
 from .models import user
 from .models import event
 from .models import admin as evtAdmin
 from .models import ticket
 from .models import equipment, equip_rental, rented_item, inventory_items, rental_details
+from .models import ticket,batch_ticket,batch
+from .models import equipment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,11 +39,6 @@ class DeptEmpSerializer(serializers.ModelSerializer):
         model = dept_employee
         fields = '__all__'
 
-class LeaveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = leave
-        fields = '__all__'
-
 class SalarieSerializer(serializers.ModelSerializer):
     class Meta:
         model = salary
@@ -59,6 +56,17 @@ class AdminSerializer(serializers.ModelSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = ticket
+        fields = "__all__"
+
+class BatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = batch
+        fields = "__all__"
+
+
+class Ticket_BatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = batch_ticket
         fields = "__all__"
 
 

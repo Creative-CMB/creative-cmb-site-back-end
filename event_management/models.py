@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Count
 import datetime
+from time import gmtime, strftime
 
 # Create your models here.
 
@@ -88,6 +89,8 @@ class event(models.Model):
     d = datetime.datetime.now()
     created_month = models.CharField(
         max_length=5, default=datetime.datetime.now().strftime('%B'))
+    created_date = models.CharField(
+        max_length=20, default=datetime.datetime.now())
 
     def __str__(self):
         return self.location
@@ -95,13 +98,13 @@ class event(models.Model):
 
 class ticket(models.Model):
     ticket_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    event_id = models.ForeignKey(event, on_delete=models.CASCADE)
+    event_id = models.OneToOneField(event, on_delete=models.CASCADE)
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
     status = models.BooleanField(default=False)
     price = models.FloatField(max_length=5, default=0.00)
-    expiration_date = models.DateField(auto_now=True, auto_now_add=False)
+    expiration_date = models.DateField(auto_now=False, auto_now_add=False)
     image = models.CharField(max_length=500)
     no_of_tickets = models.IntegerField(max_length=5)
 
@@ -111,7 +114,7 @@ class ticket(models.Model):
 
 class batch(models.Model):
     batch_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    ticket_id = models.ForeignKey(ticket, on_delete=models.CASCADE)
+    ticket_id = models.OneToOneField(ticket, on_delete=models.CASCADE)
     qty = models.IntegerField()
 
     def __str__(self):
@@ -122,7 +125,7 @@ class batch_ticket(models.Model):
     batch_ticket_id = models.CharField(
         max_length=10, primary_key=True, unique=True)
     batch_id = models.ForeignKey(batch, on_delete=models.CASCADE)
-    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
+    cus_id = models.ForeignKey(customer, on_delete=models.CASCADE, null=True)
     availability_status = models.CharField(max_length=20)
 
     def __str__(self):
@@ -338,37 +341,8 @@ class dept_employee(models.Model):
         return str(self.emp_id)
 
 
-class leave(models.Model):
-    leave_id = models.CharField(max_length=20, primary_key=True, )
-    emp_det_id = models.ForeignKey(
-        'emp_details', on_delete=models.CASCADE, default="")
-    dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
-
-    l = (
-        ("Paid", "Paid"), ("Non-Paid", "Non-Paid")
-    )
-    leave_type = models.CharField(max_length=50, choices=l, default="Non-Paid")
-    m = (
-        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
-    )
-    month = models.CharField(max_length=10, choices=m, default="January")
-    year = models.CharField(max_length=4, default=2021)
-    date = models.DateField(auto_now=False, auto_now_add=False, null=False)
-    reason = models.CharField(max_length=200)
-    s = (
-        ("Accepted", "Accepted"), ("Pending", "Pending"), ("Canceled", "Canceled")
-    )
-    status = models.CharField(max_length=10, choices=s, default="Pending")
-
-    def __str__(self):
-        return self.leave_id
-
-
 class emp_details_leave(models.Model):
     emp_id = models.ForeignKey('emp_details', on_delete=models.CASCADE)
-    leave_id = models.ForeignKey(
-        'leave', on_delete=models.CASCADE, primary_key=True,)
-
     def __str__(self):
         return self.emp_id
 
@@ -386,20 +360,10 @@ class salary(models.Model):
         return self.extra_hours * 300
     extra = property(Extra_Payment)
 
-    @property
-    def get_leave_count(self):
-        leaves = salary.objects.filter(emp_det_id=self.emp_det_id, emp_det_id__leave__month=self.month, emp_det_id__leave__year=self.year,emp_det_id__leave__status='Accepted').aggregate(leave_count=Count('emp_det_id__leave'))
-        return leaves['leave_count']
-    Leave_count = property(get_leave_count)
-
-    @property
-    def leave_amount(self):
-        return self.get_leave_count * 900
-    Leave_amount = property(leave_amount)
 
     @property
     def Total_Payment(self):
-        return self.Extra_Payment + self.basic_sal + self.bonus - self.leave_amount
+        return self.Extra_Payment + self.basic_sal + self.bonus 
     total_Payment = property(Total_Payment)
 
     m = (
