@@ -37,13 +37,14 @@ def get_api_url_patterns(request):
         'event-all': '/events',
         'users': '/users',
 
-
+        'EmployeePDF':'/EmployeeDetail-list/',
         'EmpDetailList': '/EmployeeDetail-list/',
         'EmpDetailView': '/EmployeeDetail-View/<str:pk>/',
         'EmpDetailCreate': '/EmployeeDetail-Create/',
         'EmpDetailUpdate': '/EmployeeDetail-Update/<str:pk>/',
         'EmpDetailDelete': '/EmployeeDetail-Delete/<str:pk>/',
 
+        'DepartmentPDF':'/department-list/',
         'DList': '/department-list/',
         'DView': '/department-View/<str:pk>/',
         'DCreate': '/department-Create/',
@@ -51,6 +52,7 @@ def get_api_url_patterns(request):
         'Ddelete': '/department-Delete/<str:pk>/',
         'DManagDelete': '/deptManager-Delete/<str:pk>/',
 
+        "DeptManagerPDF":'/deptManager-list/',
         'DManagList': '/deptManager-list/',
         'DManagView': '/deptManager-View/<str:pk>/',
         'DManagCreate': '/deptManager-Create/',
@@ -69,12 +71,7 @@ def get_api_url_patterns(request):
         'DEmpUpdate': '/deptEmp-Update/<str:pk>/',
         'DEmpDelete': '/deptEmp-Delete/<str:pk>/',
 
-        'LeaveList': '/Leave-list/',
-        'LeaveView': '/Leave-View/<str:pk>/',
-        'LeaveCreate': '/Leave-Create/',
-        'LeaveUpdate': '/Leave-Update/<str:pk>/',
-        'LeaveDelete': '/Leave-Delete/<str:pk>/',
-
+        'SalaryPDF':'/Salary-list/',
         'SalaryList': '/Salary-list/',
         'SalaryView': '/Salary-View/<str:pk>/',
         'SalaryCreate': '/Salary-Create/',
@@ -187,6 +184,11 @@ def deptId(request):
 
     return Response(deptidArr)
 
+@api_view(['GET'])
+def EmployeePDF(request):
+    empdetail = emp_details.objects.all()
+    serializer = Employee_DetailSerializer(empdetail, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def EmployeeDetailList(request):
@@ -350,6 +352,12 @@ def bookingEntries(request):
 # Department
 
 @api_view(['GET'])
+def DepartmentPDF(request):
+    departmen = department.objects.all()
+    serializer = DepartmentSerializer(departmen, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def DepartmentList(request):
     departmen = department.objects.all()
     serializer = DepartmentSerializer(departmen, many=True)
@@ -394,6 +402,12 @@ def DepartmentDelete(request, pk):
 
 # MAnager
 
+
+@api_view(['GET'])
+def DeptManagerPDF(request):
+    departmentemp = dept_manager.objects.all()
+    serializer = DeptManagerSerializer(departmentemp, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def DepartmentManagerList(request):
@@ -600,6 +614,11 @@ def updateEvent(request, pk):
 
 # Salary
 
+@api_view(['GET'])
+def SalaryPDF(request):
+    salary1 = salary.objects.all()
+    serializer = SalarieSerializer(salary1, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def SalarieList(request):
@@ -826,4 +845,16 @@ def userActions(request):
     # monthCount = event.objects.values("created_month").distinct()
     action = event.objects.all().order_by("-created_date")
     serializer = EventSerializer(action,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def EventStatusUpdate(request, pk):
+    eventData = event.objects.get(event_id=pk)
+    serializer = EventSerializer(
+        instance=eventData, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
     return Response(serializer.data)

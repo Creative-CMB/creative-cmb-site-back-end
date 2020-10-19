@@ -47,6 +47,8 @@ urlpatterns = [
     path('event-user-count/', views.getTotCusEventCount, name="event user count"),
     path('event-month-count/', views.getEventMonthCount, name="event month count"),
     path('actions/', views.userActions, name="actions"),
+    path('event-status/<str:pk>/', views.EventStatusUpdate,
+         name="update the status of the event"),
 
 
 
@@ -146,6 +148,7 @@ urlpatterns = [
          views.EmployeeDetailsUpdate, name="EmployeeDetail-update"),
     path('Employeeid/', views.EmpId, name="Employeeid"),
     path('Deptid/', views.deptId, name="deptid"),
+    path('EmployeeDetail-list/', views.EmployeePDF, name="EmployeeDetail-list"),
 
 
     # Department
@@ -157,6 +160,7 @@ urlpatterns = [
          views.DepartmentUpdate, name="department-Update"),
     path('department-Delete/<str:pk>/',
          views.DepartmentDelete, name="department-Delete"),
+     path('department-list/', views.DepartmentPDF, name="department-list"),
 
     # Department Manager
     path('deptManager-list/', views.DepartmentManagerList, name="deptManager-list"),
@@ -168,6 +172,7 @@ urlpatterns = [
          views.DepartmentManagerUpdate, name="deptManager-Update"),
     path('deptManager-Delete/<str:pk>/',
          views.DepartmentManagerDelete, name="deptManager-Delete"),
+     path('deptManager-list/', views.DeptManagerPDF, name="deptManager-list"),
 
 
     # Department Supervisor
@@ -201,5 +206,6 @@ urlpatterns = [
     path('Salary-Create/', views.SalaryCreate, name="Salary-Create"),
     path('Salary-Update/<str:pk>/', views.SalaryUpdate, name="Salary-Update"),
     path('Salary-Delete/<str:pk>/', views.SalaryDelete, name="Salary-Delete"),
+     path('Salary-list/', views.SalaryPDF, name="Salary-list"),
 
 ]

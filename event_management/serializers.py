@@ -7,6 +7,8 @@ from .models import ticket
 from .models import equipment, equip_rental, rented_item, inventory_items, rental_details
 from .models import ticket,batch_ticket,batch
 from .models import equipment
+from .models import userActions
+import json
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,6 +78,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
         model = equipment
         fields = "__all__"
 
+<<<<<<< HEAD
 
 class InvenItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,3 +102,9 @@ class Rental_DetailsSerializer(serializers.ModelSerializer):
         model = rental_details
         fields = '__all__'
 
+=======
+class ActionSerializer(serializers.Serializer):
+    class Meta:
+        model = userActions
+        fields = "__all__"
+>>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a

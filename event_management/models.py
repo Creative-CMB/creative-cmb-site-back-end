@@ -91,6 +91,7 @@ class event(models.Model):
         max_length=5, default=datetime.datetime.now().strftime('%B'))
     created_date = models.CharField(
         max_length=20, default=datetime.datetime.now())
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.location
@@ -378,7 +379,16 @@ class salary(models.Model):
     def __str__(self):
         return self.sal_id
 
+<<<<<<< HEAD
     
+=======
+class userActions(models.Model):
+    username = models.CharField(max_length=50)
+    createdDate = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.username
+>>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
 
 
 
