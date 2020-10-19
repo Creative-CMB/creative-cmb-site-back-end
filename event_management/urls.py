@@ -69,6 +69,7 @@ urlpatterns = [
          views.EmployeeDetailsUpdate, name="EmployeeDetail-update"),
     path('Employeeid/', views.EmpId, name="Employeeid"),
     path('Deptid/', views.deptId, name="deptid"),
+    path('EmployeeDetail-list/', views.EmployeePDF, name="EmployeeDetail-list"),
 
 
     # Department
@@ -80,6 +81,7 @@ urlpatterns = [
          views.DepartmentUpdate, name="department-Update"),
     path('department-Delete/<str:pk>/',
          views.DepartmentDelete, name="department-Delete"),
+     path('department-list/', views.DepartmentPDF, name="department-list"),
 
     # Department Manager
     path('deptManager-list/', views.DepartmentManagerList, name="deptManager-list"),
@@ -91,6 +93,7 @@ urlpatterns = [
          views.DepartmentManagerUpdate, name="deptManager-Update"),
     path('deptManager-Delete/<str:pk>/',
          views.DepartmentManagerDelete, name="deptManager-Delete"),
+     path('deptManager-list/', views.DeptManagerPDF, name="deptManager-list"),
 
 
     # Department Supervisor
@@ -117,13 +120,6 @@ urlpatterns = [
     path('deptEmp-Delete/<str:pk>/',
          views.DepartmentEmployeeDelete, name="deptEmp-Delete"),
 
-    # Leave
-    path('Leave-list/', views.LeaveList, name="Leave-list"),
-    path('Leave-View/<str:pk>/', views.LeaveView, name="Leave-View"),
-    path('Leave-Create/', views.LeaveCreate, name="Leave-Create"),
-    path('Leave-Update/<str:pk>/', views.LeaveUpdate, name="Leave-Update"),
-    path('Leave-Delete/<str:pk>/', views.LeaveDelete, name="Leave-Delete"),
-
 
     # Salary
     path('Salary-list/', views.SalarieList, name="Salary-list"),
@@ -131,5 +127,6 @@ urlpatterns = [
     path('Salary-Create/', views.SalaryCreate, name="Salary-Create"),
     path('Salary-Update/<str:pk>/', views.SalaryUpdate, name="Salary-Update"),
     path('Salary-Delete/<str:pk>/', views.SalaryDelete, name="Salary-Delete"),
+     path('Salary-list/', views.SalaryPDF, name="Salary-list"),
 
 ]

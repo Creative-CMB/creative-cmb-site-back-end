@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import user,emp_details,department,dept_employee,dept_manager,dept_supervisor,salary,leave
+from .models import user,emp_details,department,dept_employee,dept_manager,dept_supervisor,salary
 from .models import user
 from .models import event
 from .models import admin as evtAdmin
@@ -37,11 +37,6 @@ class DeptSuperSerializer(serializers.ModelSerializer):
 class DeptEmpSerializer(serializers.ModelSerializer):
     class Meta:
         model = dept_employee
-        fields = '__all__'
-
-class LeaveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = leave
         fields = '__all__'
 
 class SalarieSerializer(serializers.ModelSerializer):
