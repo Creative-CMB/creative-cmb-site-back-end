@@ -67,12 +67,6 @@ def get_api_url_patterns(request):
         'DEmpUpdate': '/deptEmp-Update/<str:pk>/',
         'DEmpDelete': '/deptEmp-Delete/<str:pk>/',
 
-        'LeaveList': '/Leave-list/',
-        'LeaveView': '/Leave-View/<str:pk>/',
-        'LeaveCreate': '/Leave-Create/',
-        'LeaveUpdate': '/Leave-Update/<str:pk>/',
-        'LeaveDelete': '/Leave-Delete/<str:pk>/',
-
         'SalaryPDF':'/Salary-list/',
         'SalaryList': '/Salary-list/',
         'SalaryView': '/Salary-View/<str:pk>/',
