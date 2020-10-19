@@ -1,5 +1,11 @@
 from django.urls import path
 from . import views
+from rest_framework import routers 
+from .views import LoginViewSet
+from django.conf.urls import include
+
+router = routers.DefaultRouter()
+router.register('register', views.LoginViewSet)
 
 urlpatterns = [
     path('api/', views.get_api_url_patterns),
@@ -8,6 +14,15 @@ urlpatterns = [
     path('new-user/', views.UserCreate, name="usersCreate"),
     path('user-update/<str:pk>/', views.UserUpdate, name="userUpdate"),
     path('user-delete/<str:pk>/', views.UserDelete, name="userDelete"),
+
+	path('', include(router.urls)),
+
+	path('dashboard/', views.dashboard, name="dashboard"),
+	path('signin/', views.signinPage, name="signin"),
+	path('login/', views.loginPage, name="login"),	
+	path('logout/', views.logoutUser, name="logout"),
+
+
     path('admin-list/', views.adminList, name="adminlist"),
     path('events/', views.EventList, name="eventList"),
     # ticket

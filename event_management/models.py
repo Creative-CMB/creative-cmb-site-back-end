@@ -6,26 +6,18 @@ from django.db.models import Count
 
 class user(models.Model):
     user_id = models.CharField(max_length=10, primary_key=True, unique=True)
-    date_of_birth = models.DateField(auto_now=False, auto_now_add=False)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    mobile_number = models.CharField(max_length=10)
-    email = models.EmailField(max_length=32)
-    
-    district = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    date_of_birth = models.DateField(auto_now=False, auto_now_add=False, null=True)
+    first_name = models.CharField(max_length=20, null=True)
+    last_name = models.CharField(max_length=20, null=True)
+    mobile_number = models.CharField(max_length=10, null=True)
+    email = models.EmailField(max_length=32, null=True)
+    district = models.CharField(max_length=100, null=True)
+    city = models.CharField(max_length=100, null=True)
 
 
     def __str__(self):
         return self.user_id
 
-
-class login(models.Model):
-    login_id = models.CharField(max_length=10, primary_key=True, unique=True)
-    user_id = models.ForeignKey(user, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.login_id
 
 
 class feedback(models.Model):
@@ -394,7 +386,7 @@ class salary(models.Model):
         ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m)
-    Year = models.IntegerField(max_length=4, default="2021")
+    year = models.IntegerField(max_length=4, default="2021")
     paid = models.BooleanField()
     Paid_Date = models.DateField(null=True, blank=True)
 

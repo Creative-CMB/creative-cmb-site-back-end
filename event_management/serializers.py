@@ -5,12 +5,28 @@ from .models import event
 from .models import admin as evtAdmin
 from .models import ticket
 from .models import equipment
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = user
         fields = '__all__'
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','username','password']
+        extra_kwargs = {'password': {'write_only': True, 'required': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        return user    
+
+
 
 class Employee_DetailSerializer(serializers.ModelSerializer):
     class Meta:

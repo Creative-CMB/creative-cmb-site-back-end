@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer,Employee_DetailSerializer,DepartmentSerializer,DeptEmpSerializer,DeptManagerSerializer,DeptSuperSerializer,LeaveSerializer,SalarieSerializer
@@ -8,6 +8,17 @@ from .models import admin as evtAdmin
 from django.core.mail import send_mail
 from datetime import datetime
 
+
+# login,logout,signup
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CreateUserForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from rest_framework import viewsets
+from .decorators import  allowed_users, admin_only
+
 # serializers
 from .serializers import UserSerializer
 from .serializers import EventSerializer
@@ -15,12 +26,15 @@ from .serializers import AdminSerializer
 from .serializers import TicketSerializer
 from .serializers import EquipmentSerializer
 
+from .serializers import LoginSerializer
+
 # models
 from .models import user
 from .models import admin as evtAdmin
 from .models import event
 from .models import ticket
 from .models import equipment
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -30,6 +44,7 @@ def get_api_url_patterns(request):
     api_urls = {
         'event-all': '/events',
         'users': '/users',
+        'login': '/login',
 
         
         'EmpDetailList':'/EmployeeDetail-list/',
@@ -79,6 +94,53 @@ def get_api_url_patterns(request):
 
     return Response(api_urls)
 
+@admin_only
+def dashboard(request):
+    return redirect('http://localhost:3000/admin')
+
+def signinPage(request):
+    
+        form = CreateUserForm()
+
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Account was successfully created for '
+                    + username)  
+                user.groups.add(Group.objects.get(name='customer'))
+             
+
+                return redirect('login')
+        
+        context = {'form':form}
+        return render(request, 'signin.html', context)
+
+
+def loginPage(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)  
+
+        if user is not None:
+            login(request, user)
+            
+            return redirect('dashboard')
+
+        else:
+            messages.info(request, 'Username OR Password is incorrect')
+
+    context = {}
+    return render(request, 'login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
 
 @api_view(['GET'])
 def UserList(request):
@@ -120,7 +182,26 @@ def UserDelete(request, pk):
     users = user.objects.get(user_id=pk)
     users.delete()
     return Response("deleted")
+
+
+class LoginViewSet(viewsets.ModelViewSet):
+    try:
+        queryset = User.objects.all()
+        serializer_class = LoginSerializer
+    except Exception as e:
+        print(e)
+        
     
+
+
+
+
+
+
+
+
+
+
 
 
 @api_view(['GET'])
