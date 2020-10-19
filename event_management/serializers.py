@@ -3,9 +3,13 @@ from .models import user,emp_details,department,dept_employee,dept_manager,dept_
 from .models import user
 from .models import event
 from .models import admin as evtAdmin
+<<<<<<< HEAD
 from .models import ticket
 from .models import equipment, equip_rental, rented_item, inventory_items, rental_details
 from .models import ticket,batch_ticket,batch
+=======
+from .models import ticket,batch_ticket,batch, reservation
+>>>>>>> 826f4a13c20d62539a82f86fcda6972d1cf2cf0f
 from .models import equipment
 from .models import userActions
 import json
@@ -79,6 +83,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 class InvenItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -103,8 +108,18 @@ class Rental_DetailsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 =======
+=======
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = reservation
+        fields = "__all__"
+>>>>>>> 826f4a13c20d62539a82f86fcda6972d1cf2cf0f
 class ActionSerializer(serializers.Serializer):
     class Meta:
         model = userActions
         fields = "__all__"
+<<<<<<< HEAD
 >>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
+=======
+>>>>>>> 826f4a13c20d62539a82f86fcda6972d1cf2cf0f

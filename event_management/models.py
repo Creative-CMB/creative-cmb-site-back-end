@@ -16,7 +16,6 @@ class user(models.Model):
     district = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
 
-
     def __str__(self):
         return self.user_id
 
@@ -73,7 +72,7 @@ class customer(models.Model):
 class event(models.Model):
     event_id = models.CharField(max_length=10, primary_key=True, unique=True)
     user_id = models.ForeignKey(user, on_delete=models.CASCADE)
-    event_name = models.CharField(max_length=100,null=True)
+    event_name = models.CharField(max_length=100, null=True)
     budget = models.FloatField(max_length=5)
     email_address = models.CharField(max_length=50)
     occassion_type = models.CharField(max_length=10)
@@ -103,7 +102,7 @@ class ticket(models.Model):
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=50)
     price = models.FloatField(max_length=5, default=0.00)
     expiration_date = models.DateField(auto_now=False, auto_now_add=False)
     image = models.CharField(max_length=500)
@@ -139,7 +138,7 @@ class reservation(models.Model):
     batch_ticket_id = models.ForeignKey(batch_ticket, on_delete=models.CASCADE)
     event_id = models.ForeignKey(event, on_delete=models.CASCADE)
     cus_id = models.ForeignKey(customer, on_delete=models.CASCADE)
-    date = models.DateField(auto_now=True, auto_now_add=False)
+    date = models.DateField(auto_now=False, auto_now_add=False)
     status = models.CharField(max_length=20)
 
     def __str__(self):
@@ -286,9 +285,9 @@ class emp_details(models.Model):
     )
     gender = models.CharField(max_length=10, choices=g, default="Male")
     r = (
-        ("Yes","Yes"),("No","No")
+        ("Yes", "Yes"), ("No", "No")
     )
-    permenent = models.CharField(max_length=4,choices =r, default="No")
+    permenent = models.CharField(max_length=4, choices=r, default="No")
     joined_date = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -307,7 +306,8 @@ class department(models.Model):
 
 
 class dept_manager(models.Model):
-    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE, primary_key=True,limit_choices_to={'position': 'Manager'})
+    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE,
+                                  primary_key=True, limit_choices_to={'position': 'Manager'})
     dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
     from_date = models.DateField(auto_now=False, auto_now_add=False)
     to_date = models.DateField(
@@ -327,7 +327,6 @@ class dept_supervisor(models.Model):
 
     def __str__(self):
         return str(self.emp_id)
-
 
 
 class dept_employee(models.Model):
@@ -368,27 +367,24 @@ class salary(models.Model):
     total_Payment = property(Total_Payment)
 
     m = (
-        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
+        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July",
+                                                                                                                                     "July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m)
     Year = models.IntegerField(max_length=4, default="2021")
-    y=(("Yes","Yes"),("No","No"))
+    y = (("Yes", "Yes"), ("No", "No"))
     paid = models.CharField(max_length=10, choices=y)
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.sal_id
 
-<<<<<<< HEAD
-    
-=======
 class userActions(models.Model):
     username = models.CharField(max_length=50)
     createdDate = models.CharField(max_length=20)
 
     def __str__(self):
         return self.username
->>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
 
 
 

@@ -27,8 +27,12 @@ urlpatterns = [
     path('batchTicket-create/', views.createBatchTicket, name="batchTicketCreate"),
     path('batchTickets/', views.GetBatchTickets, name="batchTickets"),
 
-     #booking     
-     path('displayentries/', views.bookingEntries, name='booking'),
+    # reservation
+    path('create-res/', views.ReservationCreate, name="createReservation"),
+    path('resTicket-list/', views.GetReserveTickets, name="reservationDetails"),
+    path('reservation-by-id/<str:id>/', views.GetReservationByID, name="reservationbyid"),
+    # booking
+    path('displayentries/', views.bookingEntries, name='booking'),
 
 
 
