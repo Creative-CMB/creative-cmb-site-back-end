@@ -378,7 +378,7 @@ class salary(models.Model):
     def __str__(self):
         return self.sal_id
 
-
+    
 
 
 

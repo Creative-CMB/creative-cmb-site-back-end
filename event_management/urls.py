@@ -125,11 +125,11 @@ urlpatterns = [
 	path('deptEmp-Delete/<str:pk>/', views.DepartmentEmployeeDelete, name="deptEmp-Delete"),
 
     #Leave
-	path('Leave-list/', views.LeaveList, name="Leave-list"),
-	path('Leave-View/<str:pk>/', views.LeaveView, name="Leave-View"),
-	path('Leave-Create/', views.LeaveCreate, name="Leave-Create"),
-	path('Leave-Update/<str:pk>/', views.LeaveUpdate, name="Leave-Update"),
-	path('Leave-Delete/<str:pk>/', views.LeaveDelete, name="Leave-Delete"),
+	#path('Leave-list/', views.LeaveList, name="Leave-list"),
+	#path('Leave-View/<str:pk>/', views.LeaveView, name="Leave-View"),
+	#path('Leave-Create/', views.LeaveCreate, name="Leave-Create"),
+	#path('Leave-Update/<str:pk>/', views.LeaveUpdate, name="Leave-Update"),
+	#path('Leave-Delete/<str:pk>/', views.LeaveDelete, name="Leave-Delete"),
 
     path('admin-list/', views.adminList, name="adminlist"),
 

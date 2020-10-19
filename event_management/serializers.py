@@ -8,7 +8,6 @@ from .models import equipment, equip_rental, rented_item, inventory_items, renta
 from .models import ticket,batch_ticket,batch
 from .models import equipment
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = user
