@@ -75,15 +75,12 @@ class EquipmentSerializer(serializers.ModelSerializer):
         model = equipment
         fields = "__all__"
 
-<<<<<<< HEAD
 
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = reservation
         fields = "__all__"
-=======
 class ActionSerializer(serializers.Serializer):
     class Meta:
         model = userActions
         fields = "__all__"
->>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
