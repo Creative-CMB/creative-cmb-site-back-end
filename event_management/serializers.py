@@ -5,6 +5,8 @@ from .models import event
 from .models import admin as evtAdmin
 from .models import ticket,batch_ticket,batch
 from .models import equipment
+from .models import userActions
+import json
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -76,4 +78,9 @@ class Ticket_BatchSerializer(serializers.ModelSerializer):
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = equipment
+        fields = "__all__"
+
+class ActionSerializer(serializers.Serializer):
+    class Meta:
+        model = userActions
         fields = "__all__"

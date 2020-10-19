@@ -724,3 +724,15 @@ def userActions(request):
     action = event.objects.all().order_by("-created_date")
     serializer = EventSerializer(action,many=True)
     return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def EventStatusUpdate(request, pk):
+    eventData = event.objects.get(event_id=pk)
+    serializer = EventSerializer(
+        instance=eventData, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
