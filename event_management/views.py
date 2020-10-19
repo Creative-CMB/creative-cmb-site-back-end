@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer, Employee_DetailSerializer, DepartmentSerializer, DeptEmpSerializer, DeptManagerSerializer, DeptSuperSerializer, LeaveSerializer, SalarieSerializer
-from .models import user, emp_details, department, dept_supervisor, dept_manager, dept_employee, leave, salary
+from .serializers import UserSerializer, Employee_DetailSerializer, DepartmentSerializer, DeptEmpSerializer, DeptManagerSerializer, DeptSuperSerializer,  SalarieSerializer
+from .models import user, emp_details, department, dept_supervisor, dept_manager, dept_employee, salary
 from .models import admin as evtAdmin
 from django.core.mail import send_mail
 from datetime import datetime
 from django.db.models import Count
+import time
 
 # serializers
 from .serializers import UserSerializer
@@ -32,13 +33,14 @@ def get_api_url_patterns(request):
         'event-all': '/events',
         'users': '/users',
 
-
+        'EmployeePDF':'/EmployeeDetail-list/',
         'EmpDetailList': '/EmployeeDetail-list/',
         'EmpDetailView': '/EmployeeDetail-View/<str:pk>/',
         'EmpDetailCreate': '/EmployeeDetail-Create/',
         'EmpDetailUpdate': '/EmployeeDetail-Update/<str:pk>/',
         'EmpDetailDelete': '/EmployeeDetail-Delete/<str:pk>/',
 
+        'DepartmentPDF':'/department-list/',
         'DList': '/department-list/',
         'DView': '/department-View/<str:pk>/',
         'DCreate': '/department-Create/',
@@ -46,6 +48,7 @@ def get_api_url_patterns(request):
         'Ddelete': '/department-Delete/<str:pk>/',
         'DManagDelete': '/deptManager-Delete/<str:pk>/',
 
+        "DeptManagerPDF":'/deptManager-list/',
         'DManagList': '/deptManager-list/',
         'DManagView': '/deptManager-View/<str:pk>/',
         'DManagCreate': '/deptManager-Create/',
@@ -64,12 +67,7 @@ def get_api_url_patterns(request):
         'DEmpUpdate': '/deptEmp-Update/<str:pk>/',
         'DEmpDelete': '/deptEmp-Delete/<str:pk>/',
 
-        'LeaveList': '/Leave-list/',
-        'LeaveView': '/Leave-View/<str:pk>/',
-        'LeaveCreate': '/Leave-Create/',
-        'LeaveUpdate': '/Leave-Update/<str:pk>/',
-        'LeaveDelete': '/Leave-Delete/<str:pk>/',
-
+        'SalaryPDF':'/Salary-list/',
         'SalaryList': '/Salary-list/',
         'SalaryView': '/Salary-View/<str:pk>/',
         'SalaryCreate': '/Salary-Create/',
@@ -182,6 +180,11 @@ def deptId(request):
 
     return Response(deptidArr)
 
+@api_view(['GET'])
+def EmployeePDF(request):
+    empdetail = emp_details.objects.all()
+    serializer = Employee_DetailSerializer(empdetail, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def EmployeeDetailList(request):
@@ -207,11 +210,16 @@ def EmployeeDetailCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def EmployeeDetailsUpdate(request, pk):
     empupdate = emp_details.objects.get(emp_det_id=pk)
-    serializer = Employee_DetailSerializer(
+    serializer = Employee_DetailSerializer( partial=True,
         instance=empupdate, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 
 
 @api_view(['DELETE'])
@@ -225,11 +233,15 @@ def EmployeeDetailDelete(request, pk):
 # Ticket
 @api_view(['POST'])
 def TicketCreate(request):
-    serializer = TicketSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save()
-        new_data = serializer.data
-        return Response(new_data)
+    try:
+        serializer = TicketSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            new_data = serializer.data
+        #return Response(new_data)
+    except Exception as e:
+        print(e)
+   
     return Response(serializer.data)
 
 
@@ -286,12 +298,17 @@ def GetBatches(request):
 # batch ticket
 @api_view(['POST'])
 def createBatchTicket(request):
-    serializer = Ticket_BatchSerializer(data=request.data)
-    print(serializer.initial_data)
-    if serializer.is_valid():
-        print(serializer.data)
-        batch_ticket.objects.bulk_create(serializer.initial_data)
+    try:
+       serializer = Ticket_BatchSerializer(data=request.data)
+       if serializer.is_valid(raise_exception=True):
+           serializer.save()
+           new_data = serializer.data
+           return Response(new_data)
+    except Exception as e:
+        print(e)
+
     return Response(serializer.data)
+    
 
 
 @api_view(['GET'])
@@ -358,6 +375,12 @@ def bookingEntries(request):
 # Department
 
 @api_view(['GET'])
+def DepartmentPDF(request):
+    departmen = department.objects.all()
+    serializer = DepartmentSerializer(departmen, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def DepartmentList(request):
     departmen = department.objects.all()
     serializer = DepartmentSerializer(departmen, many=True)
@@ -381,11 +404,11 @@ def DepartmentCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentUpdate(request, pk):
-    department = department.objects.get(dept_id=pk)
-    serializer = Employee_DetailSerializer(
-        instance=department, data=request.data)
+    department1 = department.objects.get(dept_id=pk)
+    serializer = DepartmentSerializer(partial=True,
+        instance=department1, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -402,6 +425,12 @@ def DepartmentDelete(request, pk):
 
 # MAnager
 
+
+@api_view(['GET'])
+def DeptManagerPDF(request):
+    departmentemp = dept_manager.objects.all()
+    serializer = DeptManagerSerializer(departmentemp, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def DepartmentManagerList(request):
@@ -427,11 +456,16 @@ def DepartmantManagerCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentManagerUpdate(request, pk):
     departmentmanager = dept_manager.objects.get(emp_id=pk)
-    serializer = DeptManagerSerializer(
+    serializer = DeptManagerSerializer(partial=True,
         instance=departmentmanager, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -498,10 +532,10 @@ def DepartmentSupervisorCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentSupervisorUpdate(request, pk):
     departmentsuper = dept_supervisor.objects.get(emp_id=pk)
-    serializer = DeptSuperSerializer(
+    serializer = DeptSuperSerializer(partial=True,
         instance=departmentsuper, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
@@ -544,10 +578,10 @@ def DepartmentEmployeeCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def DepartmentEmployeeUpdate(request, pk):
     departmentemp = dept_employee.objects.get(emp_id=pk)
-    serializer = DeptEmpSerializer(instance=departmentemp, data=request.data)
+    serializer = DeptEmpSerializer( partial=True,instance=departmentemp, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -561,39 +595,6 @@ def DepartmentEmployeeDelete(request, pk):
     departmentemp1.delete()
 
     return Response('Employee Detail succsesfully deleted!')
-
-# Leave
-
-
-@api_view(['GET'])
-def LeaveList(request):
-    leave1 = leave.objects.all()
-    serializer = LeaveSerializer(leave1, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def LeaveView(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    serializer = LeaveSerializer(leave1, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-def LeaveCreate(request):
-    serializer = LeaveSerializer(data=request.data)
-
-    if serializer.is_valid():
-        serializer.save()
-
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-def LeaveUpdate(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    serializer = DeptEmpSerializer(instance=leave1, data=request.data)
-# fetch and terurn all the events in the db
 
 
 @api_view(['GET'])
@@ -634,16 +635,13 @@ def updateEvent(request, pk):
         return Response(new_data)
     return Response(serializer.data)
 
-
-@api_view(['DELETE'])
-def LeaveDelete(request, pk):
-    leave1 = leave.objects.get(leave_id=pk)
-    leave1.delete()
-
-    return Response('Leave Detail succsesfully deleted!')
-
 # Salary
 
+@api_view(['GET'])
+def SalaryPDF(request):
+    salary1 = salary.objects.all()
+    serializer = SalarieSerializer(salary1, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def SalarieList(request):
@@ -669,10 +667,10 @@ def SalaryCreate(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def SalaryUpdate(request, pk):
-    salary1 = salary.objects.get(emp_id=pk)
-    serializer = SalarieSerializer(instance=salary1, data=request.data)
+    salary1 = salary.objects.get(sal_id=pk)
+    serializer = SalarieSerializer(partial=True,instance=salary1, data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         new_data = serializer.data
@@ -722,12 +720,34 @@ def getTotCusEventCount(request):
     cusEventCount = event.objects.values("user_id").distinct().count()
     return Response(cusEventCount)
 
-    # return the number of users who has created events in the system
 
 
+#return the count of events in the relevent month
 @api_view(['GET'])
 def getEventMonthCount(request):
     # monthCount = event.objects.values("created_month").distinct()
     monthCount = event.objects.values(
         "created_month").order_by("created_month").annotate(count=Count("created_month"))
     return Response(monthCount)
+
+#return the count of events in the relevent month
+
+
+@api_view(['GET'])
+def userActions(request):
+    # monthCount = event.objects.values("created_month").distinct()
+    action = event.objects.all().order_by("-created_date")
+    serializer = EventSerializer(action,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def EventStatusUpdate(request, pk):
+    eventData = event.objects.get(event_id=pk)
+    serializer = EventSerializer(
+        instance=eventData, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        new_data = serializer.data
+        return Response(new_data)
+    return Response(serializer.data)

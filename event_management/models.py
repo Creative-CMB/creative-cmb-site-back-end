@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Count
 import datetime
+from time import gmtime, strftime
 
 # Create your models here.
 
@@ -88,6 +89,9 @@ class event(models.Model):
     d = datetime.datetime.now()
     created_month = models.CharField(
         max_length=5, default=datetime.datetime.now().strftime('%B'))
+    created_date = models.CharField(
+        max_length=20, default=datetime.datetime.now())
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.location
@@ -95,7 +99,7 @@ class event(models.Model):
 
 class ticket(models.Model):
     ticket_id = models.CharField(primary_key=True, unique=True, max_length=10)
-    event_id = models.ForeignKey(event, on_delete=models.CASCADE)
+    event_id = models.OneToOneField(event, on_delete=models.CASCADE)
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
@@ -329,6 +333,7 @@ class dept_employee(models.Model):
         return str(self.emp_id)
 
 
+<<<<<<< HEAD
 class leave(models.Model):
     leave_id = models.CharField(max_length=20, primary_key=True, )
     emp_det_id = models.ForeignKey(
@@ -357,11 +362,10 @@ class leave(models.Model):
         return self.leave_id
 
 
+=======
+>>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
 class emp_details_leave(models.Model):
     emp_id = models.ForeignKey('emp_details', on_delete=models.CASCADE)
-    leave_id = models.ForeignKey(
-        'leave', on_delete=models.CASCADE, primary_key=True,)
-
     def __str__(self):
         return self.emp_id
 
@@ -379,6 +383,7 @@ class salary(models.Model):
         return self.extra_hours * 300
     extra = property(Extra_Payment)
 
+<<<<<<< HEAD
     @property
     def get_leave_count(self):
         leaves = salary.objects.filter(emp_det_id=self.emp_det_id, emp_det_id__leave__month=self.month, emp_det_id__leave__year=self.year,
@@ -390,10 +395,12 @@ class salary(models.Model):
     def leave_amount(self):
         return self.get_leave_count * 900
     Leave_amount = property(leave_amount)
+=======
+>>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
 
     @property
     def Total_Payment(self):
-        return self.Extra_Payment + self.basic_sal + self.bonus - self.leave_amount
+        return self.Extra_Payment + self.basic_sal + self.bonus 
     total_Payment = property(Total_Payment)
 
     m = (
@@ -408,3 +415,16 @@ class salary(models.Model):
 
     def __str__(self):
         return self.sal_id
+<<<<<<< HEAD
+=======
+
+class userActions(models.Model):
+    username = models.CharField(max_length=50)
+    createdDate = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.username
+
+
+
+>>>>>>> 2729d07bb02ca2944d640ff4525714724cba323a
