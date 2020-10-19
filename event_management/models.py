@@ -12,10 +12,9 @@ class user(models.Model):
     last_name = models.CharField(max_length=20)
     mobile_number = models.CharField(max_length=10)
     email = models.EmailField(max_length=32)
-    
+
     district = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-
 
     def __str__(self):
         return self.user_id
@@ -73,7 +72,7 @@ class customer(models.Model):
 class event(models.Model):
     event_id = models.CharField(max_length=10, primary_key=True, unique=True)
     user_id = models.ForeignKey(user, on_delete=models.CASCADE)
-    event_name = models.CharField(max_length=100,null=True)
+    event_name = models.CharField(max_length=100, null=True)
     budget = models.FloatField(max_length=5)
     email_address = models.CharField(max_length=50)
     occassion_type = models.CharField(max_length=10)
@@ -100,7 +99,7 @@ class ticket(models.Model):
     admin_id = models.ForeignKey(admin, on_delete=models.CASCADE)
     tkt_name = models.CharField(max_length=50)
     tkt_type = models.CharField(max_length=50)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=50)
     price = models.FloatField(max_length=5, default=0.00)
     expiration_date = models.DateField(auto_now=False, auto_now_add=False)
     image = models.CharField(max_length=500)
@@ -274,9 +273,9 @@ class emp_details(models.Model):
     )
     gender = models.CharField(max_length=10, choices=g, default="Male")
     r = (
-        ("Yes","Yes"),("No","No")
+        ("Yes", "Yes"), ("No", "No")
     )
-    permenent = models.CharField(max_length=4,choices =r, default="No")
+    permenent = models.CharField(max_length=4, choices=r, default="No")
     joined_date = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -295,7 +294,8 @@ class department(models.Model):
 
 
 class dept_manager(models.Model):
-    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE, primary_key=True,limit_choices_to={'position': 'Manager'})
+    emp_id = models.OneToOneField('emp_details', on_delete=models.CASCADE,
+                                  primary_key=True, limit_choices_to={'position': 'Manager'})
     dept_id = models.ForeignKey('department', on_delete=models.CASCADE)
     from_date = models.DateField(auto_now=False, auto_now_add=False)
     to_date = models.DateField(
@@ -317,7 +317,6 @@ class dept_supervisor(models.Model):
         return str(self.emp_id)
 
 
-
 class dept_employee(models.Model):
     emp_id = models.OneToOneField(
         'emp_details',  on_delete=models.CASCADE, primary_key=True, limit_choices_to={'position': 'Employee'})
@@ -334,14 +333,16 @@ class leave(models.Model):
     leave_id = models.CharField(max_length=20, primary_key=True, )
     emp_det_id = models.ForeignKey(
         'emp_details', on_delete=models.CASCADE, default="")
-    dept_id = models.ForeignKey('department',on_delete=models.CASCADE, default="")
+    dept_id = models.ForeignKey(
+        'department', on_delete=models.CASCADE, default="")
 
     l = (
         ("Paid", "Paid"), ("Non-Paid", "Non-Paid")
     )
     leave_type = models.CharField(max_length=50, choices=l, default="Non-Paid")
     m = (
-        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
+        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July",
+                                                                                                                                     "July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m, default="January")
     year = models.CharField(max_length=4, default=2021)
@@ -380,7 +381,8 @@ class salary(models.Model):
 
     @property
     def get_leave_count(self):
-        leaves = salary.objects.filter(emp_det_id=self.emp_det_id, emp_det_id__leave__month=self.month, emp_det_id__leave__year=self.year,emp_det_id__leave__status='Accepted').aggregate(leave_count=Count('emp_det_id__leave'))
+        leaves = salary.objects.filter(emp_det_id=self.emp_det_id, emp_det_id__leave__month=self.month, emp_det_id__leave__year=self.year,
+                                       emp_det_id__leave__status='Accepted').aggregate(leave_count=Count('emp_det_id__leave'))
         return leaves['leave_count']
     Leave_count = property(get_leave_count)
 
@@ -395,18 +397,14 @@ class salary(models.Model):
     total_Payment = property(Total_Payment)
 
     m = (
-        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July","July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
+        ("January", "January"), ("February", "February"), ("March", "March"), ("April", "April"), ("May", "May"), ("June", "June"), ("July",
+                                                                                                                                     "July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m)
     Year = models.IntegerField(max_length=4, default="2021")
-    y=(("Yes","Yes"),("No","No"))
+    y = (("Yes", "Yes"), ("No", "No"))
     paid = models.CharField(max_length=10, choices=y)
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.sal_id
-
-
-
-
-
