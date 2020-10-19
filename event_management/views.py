@@ -14,12 +14,9 @@ import time
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
-<<<<<<< HEAD
 from .serializers import TicketSerializer, InvenItemSerializer, Rental_DetailsSerializer, RentalSerializer
 from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer
-=======
 from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer, ReservationSerializer
->>>>>>> 826f4a13c20d62539a82f86fcda6972d1cf2cf0f
 from .serializers import EquipmentSerializer
 
 
@@ -27,13 +24,10 @@ from .serializers import EquipmentSerializer
 from .models import user
 from .models import admin as evtAdmin
 from .models import event
-<<<<<<< HEAD
 from .models import ticket
 from .models import equipment, equip_rental, inventory_items, rented_item, rental_details
 from .models import ticket, batch, batch_ticket
-=======
 from .models import ticket, batch, batch_ticket, reservation
->>>>>>> 826f4a13c20d62539a82f86fcda6972d1cf2cf0f
 from .models import equipment
 
 # Create your views here.

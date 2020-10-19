@@ -80,6 +80,7 @@ urlpatterns = [
 	path('equipment-create/', views.CreateEquipment, name="equipmentCreate"),
 	path('equipment-list/', views.ListEquipment, name="equipmentList"),
 	path('equipment-update/<str:pk>/', views.UpdateEquipment, name="updateEquipment"),
+     
 	#inventory
     path('createInventory/', views.createInventory, name="createInventory"),
 	path('listInventory/', views.ListInventory, name="listInventory"),
