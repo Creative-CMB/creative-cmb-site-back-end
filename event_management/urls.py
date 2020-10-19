@@ -58,6 +58,86 @@ urlpatterns = [
 
 
 
+ 	path('admin-list/', views.adminList, name="adminlist"),
+
+
+
+
+	#Inventory management and equipment rental (Himasha)
+	#rental
+	path('create-rental/', views.createRental, name="createRental"),
+    path('rental-details/', views.getrental, name="rentalDetails"),
+	path('rental-by-id/<str:id>/', views.getRentalById, name="rentalById"),
+    path('update-rental/<str:pk>/', views.updateRental, name="updateRental"),
+    path('delete-rental/<str:pk>/', views.deleteRental, name="deleteRental"),
+
+
+	path('add-rental-details/', views.createRentalDetails, name="addRentDetails"),
+	path('rentalDetailsById/<str:id>/', views.getRentalDetailsById, name="rentalDetailsByID"),
+	path('rentalDetails/', views.getRentalDetails, name="rental_details"),
+
+	#equipment
+	path('equipment-create/', views.CreateEquipment, name="equipmentCreate"),
+	path('equipment-list/', views.ListEquipment, name="equipmentList"),
+	path('equipment-update/<str:pk>/', views.UpdateEquipment, name="updateEquipment"),
+     
+	#inventory
+    path('createInventory/', views.createInventory, name="createInventory"),
+	path('listInventory/', views.ListInventory, name="listInventory"),
+	path('inventory-del/<str:pk>/', views.DeleteEquipment, name="deleteEquipment"),
+	
+    
+
+
+
+
+    #Employee Details
+    path('EmployeeDetail-list/', views.EmployeeDetailList, name="EmployeeDetail-list"),
+	path('EmployeeDetail-View/<str:pk>/', views.EmployeeDetailView, name="EmployeeDetail-View"),
+	path('EmployeeDetail-Create/', views.EmployeeDetailCreate, name="EmployeeDetail-Create"),
+	path('EmployeeDetail-Delete/<str:pk>/', views.EmployeeDetailDelete, name="EmployeeDetail-Delete"),
+    path('EmployeeDetail-Update/<str:pk>/', views.EmployeeDetailsUpdate, name="EmployeeDetail-update"),
+	path('Employeeid/',views.EmpId,name="Employeeid"),
+	path('Deptid/',views.deptId,name="deptid"),
+	
+
+    #Department
+	path('department-list/', views.DepartmentList, name="department-list"),
+	path('department-View/<str:pk>/', views.DepartmentView, name="department-View"),
+	path('department-Create/', views.DepartmentCreate, name="department-Create"),
+	path('department-Update/<str:pk>/', views.DepartmentUpdate, name="department-Update"),
+	path('department-Delete/<str:pk>/', views.DepartmentDelete, name="department-Delete"),
+
+    #Department Manager
+	path('deptManager-list/', views.DepartmentManagerList, name="deptManager-list"),
+	path('deptManager-View/<str:pk>/', views.DepartmentManagerView, name="deptManager-View"),
+	path('deptManager-Create/', views.DepartmantManagerCreate, name="deptManager-Create"),
+	path('deptManager-Update/<str:pk>/', views.DepartmentManagerUpdate, name="deptManager-Update"),
+	path('deptManager-Delete/<str:pk>/', views.DepartmentManagerDelete, name="deptManager-Delete"),
+
+
+	#Department Supervisor
+	path('deptSupervisor-list/', views.DepartmentSupervisorList, name="deptSupervisor-list"),
+	path('deptSupervisor-View/<str:pk>/', views.DepartmentSupervisorView, name="deptSupervisor-View"),
+	path('deptSupervisor-Create/', views.DepartmentSupervisorCreate, name="deptSupervisor-Create"),
+	path('deptSupervisor-Update/<str:pk>/', views.DepartmentSupervisorUpdate, name="deptSupervisor-Update"),
+	path('deptSupervisor-Delete/<str:pk>/', views.DepartmentSupervisorDelete, name="deptSupervisor-Delete"),
+
+
+	#Department Employee
+	path('deptEmp-list/', views.DepartmentEmployeeList, name="deptEmp-list"),
+	path('deptEmp-View/<str:pk>/', views.DepartmentEmployeeViev, name="deptEmp-View"),
+	path('deptEmp-Create/', views.DepartmentEmployeeCreate, name="deptEmp-Create"),
+	path('deptEmp-Update/<str:pk>/', views.DepartmentEmployeeUpdate, name="deptEmp-Update"),
+	path('deptEmp-Delete/<str:pk>/', views.DepartmentEmployeeDelete, name="deptEmp-Delete"),
+
+    #Leave
+	#path('Leave-list/', views.LeaveList, name="Leave-list"),
+	#path('Leave-View/<str:pk>/', views.LeaveView, name="Leave-View"),
+	#path('Leave-Create/', views.LeaveCreate, name="Leave-Create"),
+	#path('Leave-Update/<str:pk>/', views.LeaveUpdate, name="Leave-Update"),
+	#path('Leave-Delete/<str:pk>/', views.LeaveDelete, name="Leave-Delete"),
+
     path('admin-list/', views.adminList, name="adminlist"),
 
     # Employee Details

@@ -3,11 +3,13 @@ from .models import user,emp_details,department,dept_employee,dept_manager,dept_
 from .models import user
 from .models import event
 from .models import admin as evtAdmin
+from .models import ticket
+from .models import equipment, equip_rental, rented_item, inventory_items, rental_details
+from .models import ticket,batch_ticket,batch
 from .models import ticket,batch_ticket,batch, reservation
 from .models import equipment
 from .models import userActions
 import json
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,16 +72,43 @@ class Ticket_BatchSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = equipment
         fields = "__all__"
 
 
+class InvenItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = inventory_items
+        fields = '__all__'
+
+class RentedItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = rented_item
+        fields = '__all__'
+
+
+class RentalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = equip_rental
+        fields = '__all__'
+
+
+class Rental_DetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = rental_details
+        fields = '__all__'
+
+
+
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = reservation
         fields = "__all__"
+
 class ActionSerializer(serializers.Serializer):
     class Meta:
         model = userActions

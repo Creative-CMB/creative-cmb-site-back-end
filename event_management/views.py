@@ -14,13 +14,19 @@ import time
 from .serializers import UserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
+from .serializers import TicketSerializer, InvenItemSerializer, Rental_DetailsSerializer, RentalSerializer
+from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer
 from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer, ReservationSerializer
 from .serializers import EquipmentSerializer
+
 
 # models
 from .models import user
 from .models import admin as evtAdmin
 from .models import event
+from .models import ticket
+from .models import equipment, equip_rental, inventory_items, rented_item, rental_details
+from .models import ticket, batch, batch_ticket
 from .models import ticket, batch, batch_ticket, reservation
 from .models import equipment
 
@@ -730,6 +736,136 @@ def getEventMonthCount(request):
         "created_month").order_by("created_month").annotate(count=Count("created_month"))
     return Response(monthCount)
 
+
+
+#views Himasha
+#create rental
+@api_view(['POST'])
+def createRental(request):
+    serializer = RentalSerializer(data= request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+#get selected items
+@api_view(['GET'])
+def getrental(request):
+    rentals = equip_rental.objects.all()
+    serializer = RentalSerializer(rentals, many=True)
+    return Response(serializer.data)
+
+#get rental details by id
+@api_view(['GET'])
+def getRentalById(request, id):
+    rentalById = equip_rental.objects.filter(customer_id = id)
+    serializer = RentalSerializer(rentalById, many=True)
+    return Response(serializer.data)
+
+#update rental details
+@api_view(['PATCH'])
+def updateRental(request, pk):
+    rentals = equip_rental.objects.get(rent_equipment_id=pk)
+    serializer = RentalSerializer(instance=rentals, data=request.data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+#delete rental details
+@api_view(['DELETE'])
+def deleteRental(request, pk):
+    r_items = equip_rental.objects.get(rent_equipment_id=pk)
+    r_items.delete()
+    return Response("deleted")
+
+@api_view(['POST'])
+def CreateEquipment(request):
+    serializer = EquipmentSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def ListEquipment(request):
+    equipments = equipment.objects.all()
+    serializer = EquipmentSerializer(equipments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def createInventory(request):
+    serializer = InvenItemSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def DeleteEquipment(request, pk):
+    eqs = equipment.objects.get(eq_id=pk)
+    eqs.delete()
+    return Response("deleted")
+
+
+@api_view(['GET'])
+def ListInventory(request):
+    inventory = inventory_items.objects.all()
+    serializer = InvenItemSerializer(inventory, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def updateItems(request, pk):
+    items = rental_details.objects.get(rent_id = pk)
+    serializer = Rental_DetailsSerializer(instance= items, data=request.data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def UpdateEquipment(request, pk):
+    equipments = equipment.objects.get(eq_id=pk)
+    serializer = EquipmentSerializer(instance=equipments, data=request.data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def createRentalDetails(request):
+    serializer = Rental_DetailsSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getRentalDetails(request):
+    rental_Details = rental_details.objects.all()
+    serializer = Rental_DetailsSerializer(rental_Details, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def updateRentalDetails(request, pk):
+    rental_Details = rental_details.objects.get(rent_id=pk)
+    serializer = Rental_DetailsSerializer(instance=rental_Details, data=request.data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def deleteRentalDetails(request, pk):
+    rental_Details = rental_details.objects.get(rent_id=pk)
+    rental_Details.delete()
+    return Response("deleted")
+
+@api_view(['GET'])
+def getRentalDetailsById(request, id):
+    rentalDetailsById = rental_details.objects.filter(customer_id = id)
+    serializer = Rental_DetailsSerializer(rentalDetailsById, many=True)
+    return Response(serializer.data)
 #return the count of events in the relevent month
 
 
