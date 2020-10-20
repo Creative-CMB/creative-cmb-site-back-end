@@ -5,13 +5,10 @@ from .models import event
 from .models import admin as evtAdmin
 from .models import ticket,batch_ticket,batch, reservation
 from .models import equipment
-<<<<<<< HEAD
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-=======
 from .models import userActions
 import json
->>>>>>> 98db430d7eed5871b37554722933dad5630d7b8d
 
 
 class UserSerializer(serializers.ModelSerializer):
