@@ -5,14 +5,9 @@ from .models import event
 from .models import admin as evtAdmin
 from .models import ticket,batch_ticket,batch, reservation
 from .models import equipment
-<<<<<<< HEAD
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-=======
 from .models import userActions
 import json
->>>>>>> 98db430d7eed5871b37554722933dad5630d7b8d
-
+from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,18 +15,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoggedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username','password']
-        extra_kwargs = {'password': {'write_only': True, 'required': True}}
-
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        Token.objects.create(user=user)
-        return user    
-
-
+        fields = '__all__'
 
 class Employee_DetailSerializer(serializers.ModelSerializer):
     class Meta:

@@ -5,10 +5,8 @@ from time import gmtime, strftime
 
 # Create your models here.
 
-
 class user(models.Model):
     user_id = models.CharField(max_length=10, primary_key=True, unique=True)
-<<<<<<< HEAD
     date_of_birth = models.DateField(auto_now=False, auto_now_add=False, null=True)
     first_name = models.CharField(max_length=20, null=True)
     last_name = models.CharField(max_length=20, null=True)
@@ -16,16 +14,6 @@ class user(models.Model):
     email = models.EmailField(max_length=32, null=True)
     district = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100, null=True)
-=======
-    date_of_birth = models.DateField(auto_now=False, auto_now_add=False)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    mobile_number = models.CharField(max_length=10)
-    email = models.EmailField(max_length=32)
-
-    district = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
->>>>>>> 98db430d7eed5871b37554722933dad5630d7b8d
 
     def __str__(self):
         return self.user_id
@@ -366,14 +354,9 @@ class salary(models.Model):
                                                                                                                                      "July"), ("August", "August"), ("September", "September"), ("October", "October"), ("November", "November"), ("December", "December")
     )
     month = models.CharField(max_length=10, choices=m)
-<<<<<<< HEAD
-    year = models.IntegerField(max_length=4, default="2021")
-    paid = models.BooleanField()
-=======
     Year = models.IntegerField(max_length=4, default="2021")
     y = (("Yes", "Yes"), ("No", "No"))
     paid = models.CharField(max_length=10, choices=y)
->>>>>>> 98db430d7eed5871b37554722933dad5630d7b8d
     Paid_Date = models.DateField(null=True, blank=True)
 
     def __str__(self):

@@ -22,13 +22,12 @@ from rest_framework import viewsets
 from .decorators import  allowed_users, admin_only
 
 # serializers
-from .serializers import UserSerializer
+from .serializers import UserSerializer,LoggedUserSerializer
 from .serializers import EventSerializer
 from .serializers import AdminSerializer
 from .serializers import TicketSerializer, BatchSerializer, Ticket_BatchSerializer, ReservationSerializer
 from .serializers import EquipmentSerializer
 
-from .serializers import LoginSerializer
 
 # models
 from .models import user
@@ -95,10 +94,9 @@ def get_api_url_patterns(request):
 
 @admin_only
 def dashboard(request):
-    return redirect('http://localhost:3000/admin')
-
-def signinPage(request):
+    return redirect('http://localhost:3000/userdashboard')
     
+def signinPage(request):    
         form = CreateUserForm()
 
         if request.method == 'POST':
@@ -110,7 +108,6 @@ def signinPage(request):
                     + username)  
                 user.groups.add(Group.objects.get(name='customer'))
              
-
                 return redirect('login')
         
         context = {'form':form}
@@ -143,7 +140,7 @@ def logoutUser(request):
 
 @api_view(['GET'])
 def UserList(request):
-    users = user.objects.all()
+    users = user.objects.all()   
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
@@ -183,24 +180,37 @@ def UserDelete(request, pk):
     return Response("deleted")
 
 
-class LoginViewSet(viewsets.ModelViewSet):
-    try:
-        queryset = User.objects.all()
-        serializer_class = LoginSerializer
-    except Exception as e:
-        print(e)
+@api_view(['GET'])
+def LoggedUserList(request):
+    loggedUsers = User.objects.all()
+    serializer = LoggedUserSerializer(loggedUsers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def LoggedUserDelete(request, pk):
+    loggedUsers = User.objects.get(id=pk)
+    loggedUsers.delete()
+    return Response("deleted")     
+
+@allowed_users(allowed_roles=['admin'])
+@admin_only
+def registerAdminPage(request):    
+        form = CreateUserForm()        
+        print(request.user)
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Admin account was successfully created for '
+                    + username)  
+                user.groups.add(Group.objects.get(name='admin'))
+             
+                return redirect('login')
         
-    
-
-
-
-
-
-
-
-
-
-
+        context = {'form':form}
+        return render(request, 'registerAdmin.html', context)
 
 
 @api_view(['GET'])
