@@ -7,6 +7,7 @@ from time import gmtime, strftime
 
 class user(models.Model):
     user_id = models.CharField(max_length=10, primary_key=True, unique=True)
+<<<<<<< HEAD
     date_of_birth = models.DateField(auto_now=False, auto_now_add=False, null=True)
     first_name = models.CharField(max_length=20, null=True)
     last_name = models.CharField(max_length=20, null=True)
@@ -14,6 +15,16 @@ class user(models.Model):
     email = models.EmailField(max_length=32, null=True)
     district = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100, null=True)
+=======
+    date_of_birth = models.DateField(auto_now=False, auto_now_add=False)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    mobile_number = models.CharField(max_length=10)
+    email = models.EmailField(max_length=32)
+
+    district = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+>>>>>>> a4fc304e361eed37d54319c95ea8f98268f94572
 
     def __str__(self):
         return self.user_id
