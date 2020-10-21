@@ -94,7 +94,7 @@ def get_api_url_patterns(request):
 
 @admin_only
 def dashboard(request):
-    return redirect('http://localhost:3000/userdashboard')
+    return redirect('http://localhost:3000/admin')
     
 def signinPage(request):    
         form = CreateUserForm()

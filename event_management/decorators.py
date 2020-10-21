@@ -22,7 +22,7 @@ def admin_only(view_func):
             
         if group == 'customer':
             print(request.user)
-            url = 'http://localhost:3000/login/' + str(request.user)
+            url = 'http://localhost:3000/home/' + str(request.user)
             return redirect(url)
                 
         if group == 'admin':
